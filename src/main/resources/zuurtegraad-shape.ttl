@@ -1,0 +1,71 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+@prefix lzsp:           <https://data.omgeving.vlaanderen.be/id/concept/luchtzuiveringssysteem/eigenschap/> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+unit:  sh:declare [
+                      sh:prefix "unit" ;
+                      sh:namespace "http://qudt.org/vocab/unit/"^^xsd:anyURI ;
+                  ] .
+sosa:
+    sh:declare [
+                   sh:prefix "sosa" ;
+                   sh:namespace "http://www.w3.org/ns/sosa/"^^xsd:anyURI ;
+               ] .
+lzsp:   sh:declare [
+                   sh:prefix "lzsp" ;
+                   sh:namespace "https://data.omgeving.vlaanderen.be/id/concept/luchtzuiveringssysteem/eigenschap/"^^xsd:anyURI ;
+               ].
+rdf: sh:declare [
+                    sh:prefix "rdf" ;
+                    sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ;
+                ].
+
+lzsp:ZuurtegraadAlarmShape a sh:NodeShape ;
+    sh:target [
+                  a sh:SPARQLConstraint ;   # This triple is optional
+                  sh:message "pH metingen" ;
+                  sh:prefixes lzsp: , sosa: ;
+                  sh:select """
+			SELECT $this
+			WHERE {
+				$this sosa:observedProperty lzsp:zuurtegraadwaswater.
+			}
+			""" ;
+              ];
+
+
+                    sh:sparql [
+
+                                a sh:SPARQLConstraint ;   # This triple is optional
+                                sh:message "" ;
+                                sh:prefixes rdf: , sosa: , unit:;
+                                sh:select """
+                            SELECT $this ?value
+WHERE {
+	$this $PATH ?value .
+	$this $lessThan ?otherValue .
+	BIND (?value < ?otherValue AS ?result) .
+	FILTER (!bound(?result) || !(?result)) .
+}
+			SELECT $this ?value ?unit
+			WHERE {
+				$this sosa:hasResult ?result .
+                            ?result <http://qudt.org/schema/qudt/unit> ?unit ;
+                            rdf:value ?value
+				FILTER (?value > 7.5 )
+			}
+			""" ;
+#                                sh:property [
+#                                                sh:path <http://qudt.org/schema/qudt/unit> ;
+#                                                sh:hasValue unit:PH ;
+#                                            ] ;
+#                                sh:property [
+#                                                sh:path rdf:value ;
+#                                                sh:datatype xsd:decimal ;
+#                                                sh:minExclusive 7.5 ;
+#                                            ]
+
+                ] .

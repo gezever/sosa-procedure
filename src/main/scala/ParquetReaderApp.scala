@@ -48,12 +48,13 @@ object ParquetReaderApp {
 
     println(s"Data written to Parquet at: $parquetOutputPath")
 
-   val df: DataFrame = spark.read.parquet("src/main/resources/all_parquet")
+    val df: DataFrame = spark.read
+      .parquet("src/main/resources/all_parquet")
 
     println("== Parquet Schema ==")
-   df.printSchema()
+    df.printSchema()
     println("== Parquet Data Preview ==")
-  df.show()
+    df.show()
 
     spark.stop()
   }

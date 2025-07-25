@@ -1,0 +1,195 @@
+@prefix adms:           <http://www.w3.org/ns/adms#> .
+@prefix agent:          <https://data.lzs.omgeving.vlaanderen.be/id/agent/> .
+@prefix country:        <http://publications.europa.eu/resource/authority/country/> .
+@prefix dbo:            <http://dbpedia.org/ontology/> .
+@prefix dc:             <http://purl.org/dc/elements/1.1/> .
+@prefix dcat:           <http://www.w3.org/ns/dcat#> .
+@prefix dcterms:        <http://purl.org/dc/terms/> .
+@prefix gml:            <http://www.opengis.net/ont/gml#> .
+@prefix gsp:            <http://www.opengis.net/ont/geosparql#> .
+@prefix iioa:           <https://data.lzs.omgeving.vlaanderen.be/id/iioa/> .
+@prefix klasse:         <https://data.omgeving.vlaanderen.be/id/concept/bedrijfklasse/> .
+@prefix locn:           <http://www.w3.org/ns/locn#> .
+@prefix lzs:            <https://data.lzs.omgeving.vlaanderen.be/ns/vocab#> .
+@prefix lzs-type:       <https://data.omgeving.vlaanderen.be/id/concept/luchtzuiveringssysteem/> .
+@prefix lzsp:           <https://data.omgeving.vlaanderen.be/id/concept/luchtzuiveringssysteem/eigenschap/> .
+@prefix lzss:           <https://data.omgeving.vlaanderen.be/id/concept/luchtzuiveringssysteem/status/> .
+@prefix lzsst:          <https://data.omgeving.vlaanderen.be/id/concept/luchtzuiveringssysteem/stalgebruik/> .
+@prefix observatie:     <https://data.lzs.omgeving.vlaanderen.be/id/observation/> .
+@prefix omg:            <https://data.vlaanderen.be/ns/omgevingsvergunning#> .
+@prefix org:            <http://www.w3.org/ns/org#> .
+@prefix property:       <https://id.erfgoed.net/property/> .
+@prefix prov:           <http://www.w3.org/ns/prov#> .
+@prefix qudt-schema:    <https://qudt.org/schema/qudt/> .
+@prefix qudt-unit:      <https://qudt.org/vocab/unit/> .
+@prefix rdf:            <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:           <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rechtspers:     <https://data.cbb.omgeving.vlaanderen.be/id/concept/orgrechtspersoonlijkheid/> .
+@prefix rov:            <http://www.w3.org/ns/regorg#> .
+@prefix schema:         <https://schema.org/> .
+@prefix sdmx-attribute: <http://purl.org/linked-data/sdmx/2009/attribute#> .
+@prefix site:           <https://data.lzs.omgeving.vlaanderen.be/id/site/> .
+@prefix skos:           <http://www.w3.org/2004/02/skos/core#> .
+@prefix sosa:           <http://www.w3.org/ns/sosa/> .
+@prefix sosa-om:        <http://www.w3.org/ns/sosa/om#> .
+@prefix ssn:            <http://www.w3.org/ns/ssn/> .
+@prefix systeem:        <https://data.lzs.omgeving.vlaanderen.be/id/installation/> .
+@prefix time:           <http://www.w3.org/2006/time#> .
+@prefix unit:           <http://qudt.org/vocab/unit/> .
+@prefix vcard:          <http://www.w3.org/2006/vcard/ns#> .
+@prefix xsd:            <http://www.w3.org/2001/XMLSchema#> .
+
+observatie:ffccfee6-b903-498f-9c38-63894de57f31
+    rdf:type                   sosa:Observation;
+    sosa:hasFeatureOfInterest  systeem:88f17013-168c-4718-9306-996444369784;
+    sosa:hasResult             [ rdf:type   sosa:Result;
+                                     rdf:value  7.7;
+                                     <http://qudt.org/schema/qudt/unit>
+                                         unit:PH
+                               ];
+    sosa:observedProperty      lzsp:zuurtegraadwaswater;
+    sosa:resultTime            "2025-04-05T13:01:31+02:00"^^xsd:dateTime .
+
+observatie:ffccfee6-b903-498f-9c38-63894de57f22
+    rdf:type                   sosa:Observation;
+    sosa:hasFeatureOfInterest  systeem:88f17013-168c-4718-9306-996444369784;
+    sosa:hasResult             [ rdf:type   sosa:Result;
+                                     rdf:value  "359"^^xsd:decimal;
+                                     <http://qudt.org/schema/qudt/unit>
+                                         unit:M3-PER-HR
+                               ];
+    sosa:observedProperty      lzsp:waswaterdebietbevloeiing;
+    sosa:resultTime            "2025-04-05T12:01:31+02:00"^^xsd:dateTime .
+
+observatie:ffccfee6-b903-498f-9c38-63894de57f19
+    rdf:type                   sosa:Observation;
+    sosa:hasFeatureOfInterest  systeem:88f17013-168c-4718-9306-996444369784;
+    sosa:hasResult             [ rdf:type   sosa:Result;
+                                     rdf:value  lzss:storing
+                               ];
+    sosa:observedProperty      lzsp:systeemstatus;
+    sosa:resultTime            "2025-04-05T12:01:31+02:00"^^xsd:dateTime .
+
+observatie:ffccfee6-b903-498f-9c38-63894de57f13
+    rdf:type                   sosa:Observation;
+    sosa:hasFeatureOfInterest  systeem:88f17013-168c-4718-9306-996444369784;
+    sosa:hasResult             [ rdf:type   sosa:Result;
+                                     rdf:value  "359"^^xsd:decimal;
+                                     <http://qudt.org/schema/qudt/unit>
+                                         unit:PA
+                               ];
+    sosa:observedProperty      lzsp:drukvaloverhetsysteem;
+    sosa:resultTime            "2025-04-05T12:01:31+02:00"^^xsd:dateTime .
+
+observatie:ffccfee6-b903-498f-9c38-63894de57f23
+    rdf:type                   sosa:Observation;
+    sosa:hasFeatureOfInterest  systeem:88f17013-168c-4718-9306-996444369784;
+    sosa:hasResult             [ rdf:type   sosa:Result;
+                                     rdf:value  "359"^^xsd:decimal;
+                                     <http://qudt.org/schema/qudt/unit>
+                                         unit:M3-PER-HR
+                               ];
+    sosa:observedProperty      lzsp:waswaterdebietvoorbevochtiging;
+    sosa:resultTime            "2025-04-05T12:01:31+02:00"^^xsd:dateTime .
+
+observatie:ffccfee6-b903-498f-9c38-63894de57f14
+    rdf:type                   sosa:Observation;
+    sosa:hasFeatureOfInterest  systeem:88f17013-168c-4718-9306-996444369784;
+    sosa:hasResult             [ rdf:type   sosa:Result;
+                                     rdf:value  "359"^^xsd:decimal;
+                                     <http://qudt.org/schema/qudt/unit>
+                                         unit:MilliS-PER-CentiM
+                               ];
+    sosa:observedProperty      lzsp:geleidbaarheidvanhetwaswater;
+    sosa:resultTime            "2025-04-05T12:01:31+02:00"^^xsd:dateTime .
+
+observatie:ffccfee6-b903-498f-9c38-63894de57f24
+    rdf:type                   sosa:Observation;
+    sosa:hasFeatureOfInterest  systeem:88f17013-168c-4718-9306-996444369784;
+    sosa:hasResult             [ rdf:type   sosa:Result;
+                                     rdf:value  "3.7E0"^^xsd:decimal;
+                                     <http://qudt.org/schema/qudt/unit>
+                                         unit:PH
+                               ];
+    sosa:observedProperty      lzsp:zuurtegraadwaswater;
+    sosa:resultTime            "2025-04-05T12:01:31+02:00"^^xsd:dateTime .
+
+observatie:ffccfee6-b903-498f-9c38-63894de57f15
+    rdf:type                   sosa:Observation;
+    sosa:hasFeatureOfInterest  systeem:88f17013-168c-4718-9306-996444369784;
+    sosa:hasResult             [ rdf:type   sosa:Result;
+                                     rdf:value  "359"^^xsd:decimal;
+                                     <http://qudt.org/schema/qudt/unit>
+                                         unit:M3
+                               ];
+    sosa:observedProperty      lzsp:spuiwaterproductie;
+    sosa:resultTime            "2025-04-05T12:01:31+02:00"^^xsd:dateTime .
+
+observatie:ffccfee6-b903-498f-9c38-63894de57f16
+    rdf:type                   sosa:Observation;
+    sosa:hasFeatureOfInterest  systeem:88f17013-168c-4718-9306-996444369784;
+    sosa:hasResult             [ rdf:type   sosa:Result;
+                                     rdf:value  lzsst:leeg
+                               ];
+    sosa:observedProperty      lzsp:stalbezetting;
+    sosa:resultTime            "2025-04-05T12:01:31+02:00"^^xsd:dateTime .
+
+observatie:ffccfee6-b903-498f-9c38-63894de57f20
+    rdf:type                   sosa:Observation;
+    sosa:hasFeatureOfInterest  systeem:88f17013-168c-4718-9306-996444369784;
+    sosa:hasResult             [ rdf:type   sosa:Result;
+                                     rdf:value  lzss:onderhoud
+                               ];
+    sosa:observedProperty      lzsp:systeemstatus;
+    sosa:resultTime            "2025-04-05T12:01:31+02:00"^^xsd:dateTime .
+
+observatie:ffccfee6-b903-498f-9c38-63894de57f17
+    rdf:type                   sosa:Observation;
+    sosa:hasFeatureOfInterest  systeem:88f17013-168c-4718-9306-996444369784;
+    sosa:hasResult             [ rdf:type   sosa:Result;
+                                     rdf:value  lzsst:in_gebruik
+                               ];
+    sosa:observedProperty      lzsp:stalbezetting;
+    sosa:resultTime            "2025-04-05T12:01:31+02:00"^^xsd:dateTime .
+
+observatie:ffccfee6-b903-498f-9c38-63894de57f11
+    rdf:type                   sosa:Observation;
+    sosa:hasFeatureOfInterest  systeem:88f17013-168c-4718-9306-996444369784;
+    sosa:hasResult             [ rdf:type   sosa:Result;
+                                     rdf:value  "359"^^xsd:decimal;
+                                     <http://qudt.org/schema/qudt/unit>
+                                         unit:M3
+                               ];
+    sosa:observedProperty      lzsp:biobedspoelwaterproductie;
+    sosa:resultTime            "2025-04-05T12:01:31+02:00"^^xsd:dateTime .
+
+observatie:ffccfee6-b903-498f-9c38-63894de57f21
+    rdf:type                   sosa:Observation;
+    sosa:hasFeatureOfInterest  systeem:88f17013-168c-4718-9306-996444369784;
+    sosa:hasResult             [ rdf:type   sosa:Result;
+                                     rdf:value  "359"^^xsd:decimal;
+                                     <http://qudt.org/schema/qudt/unit>
+                                         unit:M3-PER-HR
+                               ];
+    sosa:observedProperty      lzsp:waswaterdebiet;
+    sosa:resultTime            "2025-04-05T12:01:31+02:00"^^xsd:dateTime .
+
+observatie:ffccfee6-b903-498f-9c38-63894de57f18
+    rdf:type                   sosa:Observation;
+    sosa:hasFeatureOfInterest  systeem:88f17013-168c-4718-9306-996444369784;
+    sosa:hasResult             [ rdf:type   sosa:Result;
+                                     rdf:value  lzss:operationeel
+                               ];
+    sosa:observedProperty      lzsp:systeemstatus;
+    sosa:resultTime            "2025-04-05T12:01:31+02:00"^^xsd:dateTime .
+
+observatie:ffccfee6-b903-498f-9c38-63894de57f12
+    rdf:type                   sosa:Observation;
+    sosa:hasFeatureOfInterest  systeem:88f17013-168c-4718-9306-996444369784;
+    sosa:hasResult             [ rdf:type   sosa:Result;
+                                     rdf:value  "359"^^xsd:decimal;
+                                     <http://qudt.org/schema/qudt/unit>
+                                         unit:M3
+                               ];
+    sosa:observedProperty      lzsp:biobedspuiwaterproductie;
+    sosa:resultTime            "2025-04-05T12:01:31+02:00"^^xsd:dateTime .

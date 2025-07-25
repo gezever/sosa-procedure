@@ -1,0 +1,74 @@
+@prefix sosa: <https://www.w3.org/TR/vocab-ssn/> .
+@prefix :     <https://data.omgeving.vlaanderen.be/ns/lws#> .
+@prefix ds:   <http://voorbeeld.be/id/dataset/> .
+@prefix obs:  <http://voorbeeld.be/id/observatie/> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix qb:   <http://purl.org/linked-data/cube#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sdmx: <http://purl.org/linked-data/sdmx/2009/attribute#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix adms:           <http://www.w3.org/ns/adms#> .
+@prefix dc:             <http://purl.org/dc/elements/1.1/> .
+@prefix dcat:           <http://www.w3.org/ns/dcat#> .
+@prefix dcterms:        <http://purl.org/dc/terms/> .
+@prefix gml:            <http://www.opengis.net/ont/gml#> .
+@prefix gsp:            <http://www.opengis.net/ont/geosparql#> .
+@prefix locn:           <http://www.w3.org/ns/locn#> .
+@prefix lzs:            <https://data.lzs.omgeving.vlaanderen.be/ns/vocab#> .
+@prefix lzsp:           <https://data.omgeving.vlaanderen.be/id/concept/luchtzuiveringssysteem/eigenschap/> .
+@prefix lzss:           <https://data.omgeving.vlaanderen.be/id/concept/luchtzuiveringssysteem/status/> .
+@prefix lzsst:          <https://data.omgeving.vlaanderen.be/id/concept/luchtzuiveringssysteem/stalgebruik/> .
+@prefix observatie:     <https://data.lzs.omgeving.vlaanderen.be/id/observation/> .
+@prefix org:            <http://www.w3.org/ns/org#> .
+@prefix property:       <https://id.erfgoed.net/property/> .
+@prefix prov:           <http://www.w3.org/ns/prov#> .
+@prefix qudt-schema:    <https://qudt.org/schema/qudt/> .
+@prefix qudt-unit:      <https://qudt.org/vocab/unit/> .
+@prefix rdf:            <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:           <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:            <http://www.w3.org/2001/XMLSchema#> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+
+:numeriekeWaarde a owl:Objectproperty;
+                                                                                                  owl:propertyChainAxiom(
+                                                                                                    sosa:hasResult
+                                                                                                    rdf:value  ).
+
+:ZuurtegraadAlarm
+    rdf:type             owl:Class ;
+    rdfs:subClassOf      sosa:Observation ;
+    owl:equivalentClass
+        [ rdf:type     owl:Class ;
+              owl:intersectionOf  ( [ rdf:type            owl:Restriction ;
+                                          owl:onProperty      sosa:observedProperty ;
+                                          owl:someValuesFrom  lzsp:zuurtegraadwaswater
+                                    ]
+                                      [ rdf:type            owl:Restriction ;
+                                            owl:onProperty <http://qudt.org/schema/qudt/unit> ;
+                                            owl:someValuesFrom  unit:PH
+                                      ]
+                                      [ rdf:type            owl:Restriction ;
+                                            owl:onProperty      :numeriekeWaarde ;
+                                            owl:someValuesFrom    [ rdf:type              rdfs:Datatype ;
+                                                                        owl:onDatatype        xsd:decimal ;
+                                                                        owl:withRestrictions  ( [ xsd:minInclusive  "7.5"^^xsd:decimal ])]])] .
+
+
+:ZuurtegraadOverschrijding rdf:type             owl:Class ;
+    rdfs:subClassOf      sosa:Result ;
+    owl:equivalentClass
+        [ rdf:type     owl:Class ;
+              owl:intersectionOf  (
+                                      [ rdf:type            owl:Restriction ;
+                                            owl:onProperty <http://qudt.org/schema/qudt/unit> ;
+                                            owl:someValuesFrom  unit:PH
+                                      ]
+                                      [ rdf:type            owl:Restriction ;
+                                            owl:onProperty      rdf:value ;
+                                            owl:someValuesFrom    [ rdf:type              rdfs:Datatype ;
+                                                                        owl:onDatatype        xsd:decimal ;
+                                                                        owl:withRestrictions  ( [ xsd:minInclusive  "7.5"^^xsd:decimal ])]])] .
+

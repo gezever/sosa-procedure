@@ -1,0 +1,68 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix lzsp: <http://example.org/lzsp/> .
+@prefix ex: <http://example.org/shapes/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+@prefix lzsp:           <https://data.omgeving.vlaanderen.be/id/concept/luchtzuiveringssysteem/eigenschap/> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+unit:  sh:declare [
+                      sh:prefix "unit" ;
+                      sh:namespace "http://qudt.org/vocab/unit/"^^xsd:anyURI ;
+                  ] .
+sosa:
+    sh:declare [
+                   sh:prefix "sosa" ;
+                   sh:namespace "http://www.w3.org/ns/sosa/"^^xsd:anyURI ;
+               ] .
+lzsp:   sh:declare [
+                       sh:prefix "lzsp" ;
+                       sh:namespace "https://data.omgeving.vlaanderen.be/id/concept/luchtzuiveringssysteem/eigenschap/"^^xsd:anyURI ;
+                   ].
+rdf: sh:declare [
+                    sh:prefix "rdf" ;
+                    sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ;
+                ].
+xsd: sh:declare [
+                    sh:prefix "xsd" ;
+                    sh:namespace "http://www.w3.org/2001/XMLSchema#"^^xsd:anyURI ;
+                ].
+#################################################################
+# Shape: Controleer dat pH <= 7.5 en debiet >= 500
+#################################################################
+
+ex:ObservatieSPARQLShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf sosa:observedProperty ;
+    sh:sparql [
+                  a sh:SPARQLConstraint ;
+                  sh:message "Zuurtegraad (pH) mag niet hoger zijn dan 7.5." ;
+                  sh:prefixes lzsp: , sosa: , xsd: ;
+                  sh:select """
+            SELECT ?this
+            WHERE {
+              ?this sosa:observedProperty lzsp:zuurtegraadwaswater ;
+                    sosa:hasResult ?result .
+              ?result <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> ?value .
+              FILTER(?value > 7.5)
+            }
+        """ ;
+              ] ;
+    sh:sparql [
+                  a sh:SPARQLConstraint ;
+                  sh:prefixes lzsp: , sosa: ;
+                  sh:message "Waswaterdebiet mag niet kleiner zijn dan 500 m³/h." ;
+                  sh:select """
+            SELECT ?this
+            WHERE {
+              ?this sosa:observedProperty lzsp:waswaterdebietbevloeiing ;
+                    sosa:hasResult ?result .
+              ?result <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> ?value .
+              FILTER(?value < 500)
+            }
+        """ ;
+              ] .
