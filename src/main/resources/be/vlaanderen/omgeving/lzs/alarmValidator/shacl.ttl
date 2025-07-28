@@ -1,7 +1,4 @@
-@prefix sh: <http://www.w3.org/ns/shacl#> .
-@prefix sosa: <http://www.w3.org/ns/sosa/> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix lzsp: <http://example.org/lzsp/> .
+
 @prefix ex: <http://example.org/shapes/> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix sosa: <http://www.w3.org/ns/sosa/> .

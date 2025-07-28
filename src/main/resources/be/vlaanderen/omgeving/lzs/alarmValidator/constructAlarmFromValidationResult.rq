@@ -1,0 +1,31 @@
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+CONSTRUCT {
+    ?newObs a sosa:Observation, ?resultSeverity;
+        prov:wasInformedBy  ?focusNode ;
+        sosa:hasFeatureOfInterest ?hasFeatureOfInterest;
+        sosa:observedProperty      ?observedProperty ;
+        sosa:resultTime ?now ;
+        sosa:phenomenonTime ?tijd;
+        sosa:hasResult   [ rdf:type   sosa:Result;
+                             rdf:value  ?message ];
+    .
+}
+WHERE {
+    ?v a sh:ValidationResult ;
+        sh:focusNode ?focusNode ;
+        sh:resultSeverity ?resultSeverity;
+        sh:resultMessage ?message .
+    ?focusNode sosa:hasFeatureOfInterest ?hasFeatureOfInterest;
+        sosa:resultTime ?tijd ;
+        sosa:observedProperty ?observedProperty .
+
+    BIND(STR(?focusNode) AS ?valStr)
+    BIND(STR(?tijd) AS ?tijdStr)
+    BIND(CONCAT(?valStr, "-", ?tijdStr) AS ?rawStr)
+    BIND(MD5(?rawStr) AS ?hash)
+    BIND(IRI(CONCAT("https://data.lzs.omgeving.vlaanderen.be/id/observation/", ?hash)) AS ?newObs)
+    BIND(NOW() AS ?now)
+}
