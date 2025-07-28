@@ -11,7 +11,7 @@ object ParquetReaderApp {
       .getOrCreate()
 
     // Read JSON file
-    val jsonFilePath = "src/main/resources/input.json"
+    val jsonFilePath = "scala-examples/src/main/resources/input.json"
     val schema = StructType(Seq(
       StructField("_id", StringType, nullable = false),
       StructField("_type", StringType, nullable = false),
@@ -41,7 +41,7 @@ object ParquetReaderApp {
     // val transformedDF = jsonDF.filter("someColumn IS NOT NULL")
 
     // Write as Parquet
-    val parquetOutputPath = "src/main/resources/all_parquet"
+    val parquetOutputPath = "scala-examples/src/main/resources/all_parquet"
     jsonDF.write
       .mode("overwrite") // overwrites if the output exists
       .parquet(parquetOutputPath)
@@ -49,7 +49,7 @@ object ParquetReaderApp {
     println(s"Data written to Parquet at: $parquetOutputPath")
 
     val df: DataFrame = spark.read
-      .parquet("src/main/resources/all_parquet")
+      .parquet("scala-examples/src/main/resources/all_parquet")
 
     println("== Parquet Schema ==")
     df.printSchema()

@@ -22,13 +22,13 @@ import java.io.FileInputStream
 object AlarmValidator {
   def main(args: Array[String]): Unit = {
 
-    val SHAPES = "src/main/resources/shacl.ttl"
-    val DATA = "src/main/resources/input.jsonld"
-    val ALARM = "src/main/resources/alarm_output.jsonld"
-    val ALARM_TTL = "src/main/resources/alarm_output.ttl"
-    //val context = new ObjectMapper().readTree(new FileInputStream("src/main/resources/be/vlaanderen/omgeving/lzs/context.json"))
-    val frameFile = "src/main/resources/input.json"
-    val frameString = scala.io.Source.fromFile("src/main/resources/be/vlaanderen/omgeving/lzs/frame.json", "utf-8").getLines.mkString
+    val SHAPES = "scala-examples/src/main/resources/shacl.ttl"
+    val DATA = "scala-examples/src/main/resources/input.jsonld"
+    val ALARM = "scala-examples/src/main/resources/alarm_output.jsonld"
+    val ALARM_TTL = "scala-examples/src/main/resources/alarm_output.ttl"
+    //val context = new ObjectMapper().readTree(new FileInputStream("scala-examples/src/main/resources/be/vlaanderen/omgeving/lzs/context.json"))
+    val frameFile = "scala-examples/src/main/resources/input.json"
+    val frameString = scala.io.Source.fromFile("scala-examples/src/main/resources/be/vlaanderen/omgeving/lzs/frame.json", "utf-8").getLines.mkString
 
 
 

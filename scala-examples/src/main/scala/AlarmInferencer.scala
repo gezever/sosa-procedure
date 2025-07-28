@@ -8,7 +8,7 @@ import java.io.FileInputStream
 object AlarmInferencer {
   def main(args: Array[String]): Unit = {
     val observatieModel = ModelFactory.createDefaultModel()
-    val observatie_input = new FileInputStream("src/main/resources/input.jsonld")
+    val observatie_input = new FileInputStream("scala-examples/src/main/resources/input.jsonld")
 
     RDFParser.create()
       .source(observatie_input)
@@ -16,7 +16,7 @@ object AlarmInferencer {
       .parse(observatieModel)
 
     val ontologyModel = ModelFactory.createDefaultModel()
-    val alarm_input = new FileInputStream("src/main/resources/alarmen.ttl")
+    val alarm_input = new FileInputStream("scala-examples/src/main/resources/alarmen.ttl")
 
     RDFParser.create()
       .source(alarm_input)

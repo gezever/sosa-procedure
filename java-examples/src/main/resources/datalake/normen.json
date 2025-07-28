@@ -1,0 +1,139 @@
+[
+  {
+    "_id": "lzs-norm:1",
+    "klasse": "lzs-type:s1",
+    "parameter": "lzsp:zuurtegraadwaswater",
+    "label": "Bandbreedtes zuurtegraad waswater (6 < x < 8,5)",
+    "bandbreedtes": [
+      {
+        "label": "< 6",
+        "type": "< min. grenswaarde",
+        "value": null,
+        "minValue": null,
+        "maxValue": 6,
+        "operatie": null,
+        "note": "Onder de minimum grenswaarde van 6"
+      },
+      {
+        "label": "> 8,5",
+        "type": "> max. grenswaarde",
+        "value": null,
+        "minValue": 8.5,
+        "maxValue": null,
+        "operatie": null,
+        "note": "Boven de maximum grenswaarde van 8,5"
+      }
+    ]
+  },
+  {
+    "_id": "lzs-norm:2",
+    "klasse": "lzs-type:s1",
+    "parameter": "lzsp:geleidbaarheidvanhetwaswater",
+    "label": "Bandbreedtes geleidbaarheid",
+    "bandbreedtes": [
+      {
+        "label": "> 0%",
+        "type": "> max. grenswaarde",
+        "value": null,
+        "minValue": 0,
+        "maxValue": null,
+        "operatie": "som",
+        "note": "Boven de maximale waarde op technische fiche"
+      }
+    ]
+  },
+  {
+    "_id": "lzs-norm:3",
+    "klasse": "lzs-type:s1",
+    "parameter": "lzsp:waswaterdebiet",
+    "label": "Bandbreedtes waswaterdebiet over het waspakket",
+    "bandbreedtes": [
+      {
+        "label": "Afwijking > 20%",
+        "type": "< min. grenswaarde",
+        "value": null,
+        "minValue": null,
+        "maxValue": 0.8,
+        "operatie": "product",
+        "note": "Onder de minimum grenswaarde, een afwijking > 20% t.o.v referentiewaarde technische fiche"
+      }
+    ]
+  },
+  {
+    "_id": "lzs-norm:4",
+    "klasse": "lzs-type:s1",
+    "parameter": "lzsp:spuiwaterproductie",
+    "label": "Bandbreedtes waswaterdebiet over het waspakket",
+    "bandbreedtes": [
+      {
+        "label": "Afwijking > 10%",
+        "type": "< min. grenswaarde",
+        "value": null,
+        "minValue": null,
+        "maxValue": 0.9,
+        "operatie": "product",
+        "note": "Onder de minimum grenswaarde, een afwijking > 10% t.o.v referentiewaarde technische fiche"
+      }
+    ]
+  },
+  {
+    "_id": "lzs-norm:5",
+    "klasse": "lzs-type:s1",
+    "parameter": "lzsp:drukvaloverhetsysteem",
+    "label": "Bandbreedtes drukval over pakket",
+    "bandbreedtes": [
+      {
+        "label": "Afwijking > 40%",
+        "type": "< min. grenswaarde",
+        "value": null,
+        "minValue": null,
+        "maxValue": 0.6,
+        "operatie": "product",
+        "note": "Onder de minimum grenswaarde, een afwijking > 40% t.o.v referentiewaarde technische fiche"
+      },
+      {
+        "label": "Afwijking > 40%",
+        "type": "> max. grenswaarde",
+        "value": null,
+        "minValue": 1.4,
+        "maxValue": null,
+        "operatie": "product",
+        "note": "Boven de maximum grenswaarde, een afwijking > 40% t.o.v referentiewaarde technische fiche"
+      }
+    ]
+  },
+  {
+    "_id": "lzs-norm:6",
+    "klasse": "lzs-type:s2",
+    "parameter": "lzsp:zuurtegraadwaswater",
+    "label": "Bandbreedte zuurtegraad waswater",
+    "bandbreedtes": [
+      {
+        "label": "Afwijking > 1 pH-eenheid (boven de norm, grenswaarde maximum)",
+        "type": "boven maximum grenswaarde",
+        "value": null,
+        "minValue": 1,
+        "maxValue": null,
+        "operatie": "som",
+        "note": "Boven de maximum grenswaarde, een afwijking > (waarde technische fiche + 1 pH)"
+      }
+    ]
+  },
+  {
+    "_id": "lzs-norm:15",
+    "klasse": "lzs-type:s3",
+    "parameter": "lzsp:drukvaloverhetsysteem",
+    "label": "Bandbreedte drukval",
+    "bandbreedtes": [
+      {
+        "label": "Afwijking > 50 Pa",
+        "type": "boven maximum grenswaarde",
+        "value": null,
+        "minValue": 50,
+        "maxValue": null,
+        "operatie": "som",
+        "note": "Boven de maximum grenswaarde, een afwijking > (waarde technische fiche + 50 Pa)"
+      }
+    ]
+  }
+]
