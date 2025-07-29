@@ -1,0 +1,110 @@
+[
+  {
+    "_id": "systeem:0000144d-2395-4721-b966-8202e37f512d",
+    "_type": "ssn:System",
+    "label": "LZS 1 Inno+ B.V.",
+    "type": "lzs-type:s1",
+    "hasGeometry": {
+      "_type": "gsp:Geometry",
+      "asWKT": "<http://www.opengis.net/def/crs/EPSG/0/31370> POINT(96859,62 209804,2)"
+    },
+    "alternatieveId": {
+      "_type": "adms:Identifier",
+      "dc_type": "armoscode",
+      "armoscode": "LZS0000001",
+      "schemaAgency": "ARMOSLoket"
+    },
+    "isDeelVan": "iioa:0000144d-2395-4721-b966-8202e37i804o",
+    "exploitant": "agent:0000299d-2395-4721-b966-8202e37a8211",
+    "locatie": "site:0000244d-2395-4721-b966-8202e37e312e",
+    "dataleverancier": "agent:0000199d-2395-4721-b966-8202e37a8211",
+    "hasOperatingRange": {
+      "_id": "operatingrange:0000144d-2395-4721-b966-8202e37f512d",
+      "_type": "ssn-system:OperatingRange",
+      "hasOperatingProperty": [
+        {
+          "_type": "ssn-system:OperatingProperty",
+          "parameter": "lzsp:geleidbaarheidvanhetwaswater",
+          "value": null,
+          "minValue": null,
+          "maxValue": 40
+        },
+        {
+          "_type": "ssn-system:OperatingProperty",
+          "parameter": "lzsp:waswaterdebiet",
+          "value": null,
+          "minValue": 10,
+          "maxValue": null
+        },
+        {
+          "_type": "ssn-system:OperatingProperty",
+          "parameter": "lzsp:spuiwaterproductie",
+          "value": null,
+          "minValue": 70,
+          "maxValue": null
+        },
+        {
+          "_type": "ssn-system:OperatingProperty",
+          "parameter": "lzsp:drukvaloverhetsysteem",
+          "value": 100,
+          "minValue": null,
+          "maxValue": null
+        }
+      ]
+    }
+  },
+  {
+    "_id": "systeem:1111111-2395-4721-b966-8202e37f512d",
+    "_type": "ssn:System",
+    "label": "LZS 2 Inno+ B.V.",
+    "type": "lzs-type:s2",
+    "hasGeometry": {
+      "_type": "gsp:Geometry",
+      "asWKT": "<http://www.opengis.net/def/crs/EPSG/0/31370> POINT(96859,62 209804,2)"
+    },
+    "alternatieveId": {
+      "_type": "adms:Identifier",
+      "dc_type": "armoscode",
+      "armoscode": "LZS0000002",
+      "schemaAgency": "ARMOSLoket"
+    },
+    "isDeelVan": "iioa:0000144d-2395-4721-b966-8202e37i804o",
+    "exploitant": "agent:0000299d-2395-4721-b966-8202e37a8211",
+    "locatie": "site:0000244d-2395-4721-b966-8202e37e312e",
+    "dataleverancier": "agent:0000199d-2395-4721-b966-8202e37a8211",
+    "hasOperatingRange": {
+      "_id": "operatingrange:1111111-2395-4721-b966-8202e37f512d",
+      "_type": "ssn-system:OperatingRange",
+      "hasOperatingProperty": [
+        {
+          "_type": "ssn-system:OperatingProperty",
+          "parameter": "lzsp:geleidbaarheidvanhetwaswater",
+          "value": null,
+          "minValue": null,
+          "maxValue": 100
+        },
+        {
+          "_type": "ssn-system:OperatingProperty",
+          "parameter": "lzsp:waswaterdebiet",
+          "value": null,
+          "minValue": 20,
+          "maxValue": null
+        },
+        {
+          "_type": "ssn-system:OperatingProperty",
+          "parameter": "lzsp:spuiwaterproductie",
+          "value": null,
+          "minValue": 50,
+          "maxValue": null
+        },
+        {
+          "_type": "ssn-system:OperatingProperty",
+          "parameter": "lzsp:drukvaloverhetsysteem",
+          "value": 80,
+          "minValue": null,
+          "maxValue": null
+        }
+      ]
+    }
+  }
+]
