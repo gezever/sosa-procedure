@@ -16,12 +16,16 @@ import static org.apache.spark.sql.functions.when;
  * https://www.sparkcodehub.com/pyspark/dataframe/join-dataframes-array-column-match#google_vignette
  * https://www.baeldung.com/spark-dataframes
  */
-public class QueryAlarmenTest {
+public class QueryPrimaireAlarmen {
     public static void main(String[] args) {
         generatePrimaireAlarmenBySqlQuery();
 //        generatePrimaireAlarmenWithDataframeApi();
     }
 
+    /**
+     * Bereken primaire alarmen op basis van sql query.
+     * De query die de absolute bandbreedtes per lzs berekent kan telkens on the fly gebeuren of vooraf reeds gematerialiseerd zijn in bestaande persistente view of tabel.
+     */
     private static void generatePrimaireAlarmenBySqlQuery() {
         SparkSession spark = SparkSession.builder().appName("QueryAlarmen").master("local").getOrCreate();
         // Read json into dataframe
@@ -35,30 +39,31 @@ public class QueryAlarmenTest {
         // Bereken absolute 'norm' bandbreedtes per parameter per lzs
         // Een norm specifieert 'abnormale' bandbreedtes (outofboundranges) voor een parameter.
         // Deze bandbreedtes kunnen relatief t.o.v referentiewaarde uitgedrukt zijn (operatie = 'som' of 'product') of absoluut
-        Dataset<Row> absnormbandbreedtes = spark.sql("" +
-                                                     "WITH lzs AS (SELECT _id, type FROM lzsview), " +
-                                                     "normaloperatingrange AS (SELECT _id as lzsid, explode(parameterconditie) as parameterrange FROM lzsview), " +
-                                                     "norm AS (SELECT klasse, parameter, explode(bandbreedtes) as bandbreedte FROM normview) " +
-                                                     "SELECT lzs._id as lzsid, " +
-                                                     "       norm.parameter, " +
-                                                     "       COALESCE(normaloperatingrange.parameterrange.value, normaloperatingrange.parameterrange.minValue, normaloperatingrange.parameterrange.maxValue) as referentiewaarde, " +
-                                                     "       norm.bandbreedte.minValue as relatieveMinValueNormBandbreedte, " +
-                                                     "       norm.bandbreedte.maxValue as relatieveMaxValueNormBandbreedte, " +
-                                                     "       norm.bandbreedte.operatie as operatie, " +
-                                                     "       norm.bandbreedte.label, " +
-                                                     "       norm.bandbreedte.type, " +
-                                                     "       norm.bandbreedte.note, " +
-                                                     "       CASE WHEN norm.bandbreedte.operatie = 'som' THEN COALESCE(normaloperatingrange.parameterrange.maxValue + norm.bandbreedte.minValue, normaloperatingrange.parameterrange.value + norm.bandbreedte.minValue) " +
-                                                     "            WHEN norm.bandbreedte.operatie = 'product' THEN COALESCE(normaloperatingrange.parameterrange.maxValue * norm.bandbreedte.minValue, normaloperatingrange.parameterrange.value * norm.bandbreedte.minValue) " +
-                                                     "            WHEN norm.bandbreedte.operatie is NULL THEN norm.bandbreedte.minValue " +
-                                                     "       END as minValue, " +
-                                                     "       CASE WHEN norm.bandbreedte.operatie = 'som' THEN COALESCE(normaloperatingrange.parameterrange.minValue + norm.bandbreedte.maxValue, normaloperatingrange.parameterrange.value + norm.bandbreedte.maxValue) " +
-                                                     "            WHEN norm.bandbreedte.operatie = 'product' THEN COALESCE(normaloperatingrange.parameterrange.minValue * norm.bandbreedte.maxValue, normaloperatingrange.parameterrange.value * norm.bandbreedte.maxValue) " +
-                                                     "            WHEN norm.bandbreedte.operatie is NULL THEN norm.bandbreedte.maxValue " +
-                                                     "       END as maxValue " +
-                                                     "FROM lzs " +
-                                                     "JOIN norm ON lzs.type = norm.klasse " +
-                                                     "LEFT JOIN normaloperatingrange ON normaloperatingrange.lzsid = lzs._id AND normaloperatingrange.parameterrange.parameter = norm.parameter");
+        String selectBandbreedtes = """
+                WITH lzs AS (SELECT _id, type FROM lzsview), \
+                normaloperatingrange AS (SELECT _id as lzsid, explode(parameterconditie) as parameterrange FROM lzsview), \
+                norm AS (SELECT klasse, parameter, explode(bandbreedtes) as bandbreedte FROM normview) \
+                SELECT lzs._id as lzsid, \
+                       norm.parameter, \
+                       COALESCE(normaloperatingrange.parameterrange.value, normaloperatingrange.parameterrange.minValue, normaloperatingrange.parameterrange.maxValue) as referentiewaarde, \
+                       norm.bandbreedte.minValue as relatieveMinValueNormBandbreedte, \
+                       norm.bandbreedte.maxValue as relatieveMaxValueNormBandbreedte, \
+                       norm.bandbreedte.operatie as operatie, \
+                       norm.bandbreedte.label, \
+                       norm.bandbreedte.type, \
+                       norm.bandbreedte.note, \
+                       CASE WHEN norm.bandbreedte.operatie = 'som' THEN COALESCE(normaloperatingrange.parameterrange.maxValue + norm.bandbreedte.minValue, normaloperatingrange.parameterrange.value + norm.bandbreedte.minValue) \
+                            WHEN norm.bandbreedte.operatie = 'product' THEN COALESCE(normaloperatingrange.parameterrange.maxValue * norm.bandbreedte.minValue, normaloperatingrange.parameterrange.value * norm.bandbreedte.minValue) \
+                            WHEN norm.bandbreedte.operatie is NULL THEN norm.bandbreedte.minValue \
+                       END as minValue, \
+                       CASE WHEN norm.bandbreedte.operatie = 'som' THEN COALESCE(normaloperatingrange.parameterrange.minValue + norm.bandbreedte.maxValue, normaloperatingrange.parameterrange.value + norm.bandbreedte.maxValue) \
+                            WHEN norm.bandbreedte.operatie = 'product' THEN COALESCE(normaloperatingrange.parameterrange.minValue * norm.bandbreedte.maxValue, normaloperatingrange.parameterrange.value * norm.bandbreedte.maxValue) \
+                            WHEN norm.bandbreedte.operatie is NULL THEN norm.bandbreedte.maxValue \
+                       END as maxValue \
+                FROM lzs \
+                JOIN norm ON lzs.type = norm.klasse \
+                LEFT JOIN normaloperatingrange ON normaloperatingrange.lzsid = lzs._id AND normaloperatingrange.parameterrange.parameter = norm.parameter""";
+        Dataset<Row> absnormbandbreedtes = spark.sql(selectBandbreedtes);
 
         absnormbandbreedtes.show();
         absnormbandbreedtes.printSchema();
@@ -67,22 +72,25 @@ public class QueryAlarmenTest {
         Dataset<Row> observaties = spark.read().option("multiline", "true").json("java-examples/src/main/resources/datalake/observaties.json");
         observaties.createOrReplaceTempView("observaties");
 
-        Dataset<Row> primairealarmen = spark.sql("SELECT " +
-                                                 "               concat('observatie:', uuid()) as _id, " +
-                                                 "               'sosa:Observation' as _type, " +
-                                                 "               obs.hasFeatureOfInterest, " +
-                                                 "               obs.observedProperty, " +
-                                                 "               current_date() as resultTime, " +
-                                                 "               obs.resultTime as phenomenTime," +
-                                                 "               absnorm.type as alarmtype,  " +
-                                                 "               absnorm.label,  " +
-                                                 "               obs.result.numerieke_waarde as gemetenwaarde, " +
-                                                 "               absnorm.referentiewaarde, " +
-                                                 "               absnorm.minValue as  minValueNormBandbreedte, " +
-                                                 "               absnorm.maxValue as  maxValueNormBandbreedte " +
-                                                 "        FROM  observaties obs " +
-                                                 "        JOIN  absnormbandbreedtes absnorm ON absnorm.lzsid = obs.hasFeatureOfInterest AND absnorm.parameter = obs.observedProperty " +
-                                                 "        WHERE (absnorm.minValue is NULL OR obs.result.numerieke_waarde > absnorm.minValue) AND (absnorm.maxValue IS NULL OR obs.result.numerieke_waarde < absnorm.maxValue)");
+        String selectAlarmen = """
+                SELECT \
+                   concat('observatie:', uuid()) as _id, \
+                   'sosa:Observation' as _type, \
+                   obs.hasFeatureOfInterest, \
+                   obs.observedProperty, \
+                   current_date() as resultTime, \
+                   obs.resultTime as phenomenTime,\
+                   absnorm.type as alarmtype,  \
+                   absnorm.label,  \
+                   obs.result.numerieke_waarde as gemetenwaarde, \
+                   absnorm.referentiewaarde, \
+                   absnorm.minValue as  minValueNormBandbreedte, \
+                   absnorm.maxValue as  maxValueNormBandbreedte \
+                FROM  observaties obs \
+                JOIN  absnormbandbreedtes absnorm ON absnorm.lzsid = obs.hasFeatureOfInterest AND absnorm.parameter = obs.observedProperty \
+                WHERE (absnorm.minValue is NULL OR obs.result.numerieke_waarde > absnorm.minValue) AND (absnorm.maxValue IS NULL OR obs.result.numerieke_waarde < absnorm.maxValue)""";
+
+        Dataset<Row> primairealarmen = spark.sql(selectAlarmen);
 
 
         primairealarmen.show();
@@ -112,7 +120,6 @@ public class QueryAlarmenTest {
                         when(col("bandbreedte.operatie").equalTo("som"), coalesce(col("parameterrange.minValue").$plus(col("bandbreedte.maxValue")), col("parameterrange.value").$plus(col("bandbreedte.maxValue"))))
                                 .when(col("bandbreedte.operatie").equalTo("product"), coalesce(col("parameterrange.minValue").multiply(col("bandbreedte.maxValue")), col("parameterrange.value").multiply(col("bandbreedte.maxValue"))))
                                 .otherwise(col("bandbreedte.maxValue")))
-//                .drop(operatingrange.col("_id"))
                 .select(lzs.col("_id").alias("lzsid"),
                         col("parameter"),
                         coalesce(col("parameterrange.value"), col("parameterrange.minValue"), col("parameterrange.maxValue")).alias("referentiewaarde"),
