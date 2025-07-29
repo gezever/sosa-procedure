@@ -43,6 +43,7 @@ object AlarmValidator {
       .lang(Lang.JSONLD)
       .parse(observatieModel)
     val combinedModel = ModelFactory.createUnion(observatieModel, report.getModel)
+    report.getModel.write(System.out, "TURTLE")
     //combinedModel.write(System.out, "TURTLE")
 
     // 3.2. Compileer de query

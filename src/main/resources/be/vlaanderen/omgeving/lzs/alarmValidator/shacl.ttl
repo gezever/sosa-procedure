@@ -1,11 +1,16 @@
-
-@prefix ex: <http://example.org/shapes/> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix sosa: <http://www.w3.org/ns/sosa/> .
-@prefix lzsp:           <https://data.omgeving.vlaanderen.be/id/concept/luchtzuiveringssysteem/eigenschap/> .
+@prefix sparqlconstraint:  <https://data.omgeving.vlaanderen.be/id/sparqlconstraint/luchtzuiveringssysteem/> .
+@prefix nodeshape:  <https://data.omgeving.vlaanderen.be/id/nodeshape/luchtzuiveringssysteem/> .
+@prefix lzsp:  <https://data.omgeving.vlaanderen.be/id/concept/luchtzuiveringssysteem/eigenschap/> .
 @prefix unit: <http://qudt.org/vocab/unit/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix actieklasse:  <https://data.omgeving.vlaanderen.be/ns/lzs#> .
+@prefix rdfs:             <http://www.w3.org/2000/01/rdf-schema#> .
+
+
+
 
 unit:  sh:declare [
                       sh:prefix "unit" ;
@@ -28,38 +33,58 @@ xsd: sh:declare [
                     sh:prefix "xsd" ;
                     sh:namespace "http://www.w3.org/2001/XMLSchema#"^^xsd:anyURI ;
                 ].
+
+
+
 #################################################################
 # Shape: Controleer dat pH <= 7.5 en debiet >= 500
 #################################################################
 
-ex:ObservatieSPARQLShape
+nodeshape:ObservatieInfoShape
     a sh:NodeShape ;
+    sh:severity sh:Info ;
     sh:targetSubjectsOf sosa:observedProperty ;
-    sh:sparql [
-                  a sh:SPARQLConstraint ;
-                  sh:message "Zuurtegraad (pH) mag niet hoger zijn dan 7.5." ;
-                  sh:prefixes lzsp: , sosa: , xsd: ;
-                  sh:select """
-            SELECT ?this
-            WHERE {
-              ?this sosa:observedProperty lzsp:zuurtegraadwaswater ;
-                    sosa:hasResult ?result .
-              ?result <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> ?value .
-              FILTER(?value > 7.5)
-            }
-        """ ;
-              ] ;
-    sh:sparql [
-                  a sh:SPARQLConstraint ;
-                  sh:prefixes lzsp: , sosa: ;
-                  sh:message "Waswaterdebiet mag niet kleiner zijn dan 500 m³/h." ;
-                  sh:select """
+    sh:sparql sparqlconstraint:zuurtegraadwaswater, sparqlconstraint:waswaterdebietbevloeiing .
+
+
+nodeshape:ObservatieWarningShape
+    a sh:NodeShape ;
+    sh:severity sh:Warning ;
+    sh:targetSubjectsOf sosa:observedProperty ;
+    sh:sparql sparqlconstraint:zuurtegraadwaswater, sparqlconstraint:waswaterdebietbevloeiing .
+
+nodeshape:ObservatieViolationShape
+    a sh:NodeShape ;
+    sh:severity sh:Violation ;
+    sh:targetSubjectsOf sosa:observedProperty ;
+    sh:sparql sparqlconstraint:zuurtegraadwaswater, sparqlconstraint:waswaterdebietbevloeiing .
+
+sparqlconstraint:waswaterdebietbevloeiing  a sh:SPARQLConstraint ;
+    sh:prefixes lzsp: , sosa: ;
+    sh:message "Waswaterdebiet mag niet kleiner zijn dan 500 m³/h." ;
+
+    sh:select """
             SELECT ?this
             WHERE {
               ?this sosa:observedProperty lzsp:waswaterdebietbevloeiing ;
                     sosa:hasResult ?result .
               ?result <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> ?value .
-              FILTER(?value < 500)
+              FILTER(?value <= 500)
             }
         """ ;
-              ] .
+                  .
+
+sparqlconstraint:zuurtegraadwaswater  a sh:SPARQLConstraint ;
+    sh:message "Zuurtegraad (pH) mag niet hoger zijn dan 7.5. kl" ;
+    sh:prefixes lzsp: , sosa: , xsd: ;
+    sh:select """
+            SELECT ?this
+            WHERE {
+              ?this sosa:observedProperty lzsp:zuurtegraadwaswater ;
+                    sosa:hasResult ?result .
+              ?result <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> ?value .
+              FILTER(?value > 7.5 && ?value <= 10)
+
+            }
+        """ ;
+                  .
