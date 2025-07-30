@@ -1,0 +1,66 @@
+@prefix actieklasse:      <https://data.omgeving.vlaanderen.be/ns/lzs#> .
+@prefix adms:             <http://www.w3.org/ns/adms#> .
+@prefix agent:            <https://data.lzs.omgeving.vlaanderen.be/id/agent/> .
+@prefix country:          <http://publications.europa.eu/resource/authority/country/> .
+@prefix dbo:              <http://dbpedia.org/ontology/> .
+@prefix dc:               <http://purl.org/dc/elements/1.1/> .
+@prefix dcat:             <http://www.w3.org/ns/dcat#> .
+@prefix dcterms:          <http://purl.org/dc/terms/> .
+@prefix gml:              <http://www.opengis.net/ont/gml#> .
+@prefix gsp:              <http://www.opengis.net/ont/geosparql#> .
+@prefix iioa:             <https://data.lzs.omgeving.vlaanderen.be/id/iioa/> .
+@prefix klasse:           <https://data.omgeving.vlaanderen.be/id/concept/bedrijfklasse/> .
+@prefix locn:             <http://www.w3.org/ns/locn#> .
+@prefix lzs:              <https://data.lzs.omgeving.vlaanderen.be/ns/vocab#> .
+@prefix lzs-type:         <https://data.omgeving.vlaanderen.be/id/concept/luchtzuiveringssysteem/> .
+@prefix lzsp:             <https://data.omgeving.vlaanderen.be/id/concept/luchtzuiveringssysteem/eigenschap/> .
+@prefix lzss:             <https://data.omgeving.vlaanderen.be/id/concept/luchtzuiveringssysteem/status/> .
+@prefix lzsst:            <https://data.omgeving.vlaanderen.be/id/concept/luchtzuiveringssysteem/stalgebruik/> .
+@prefix nodeshape:        <https://data.omgeving.vlaanderen.be/id/nodeshape/luchtzuiveringssysteem/> .
+@prefix observatie:       <https://data.lzs.omgeving.vlaanderen.be/id/observation/> .
+@prefix omg:              <https://data.vlaanderen.be/ns/omgevingsvergunning#> .
+@prefix org:              <http://www.w3.org/ns/org#> .
+@prefix property:         <https://id.erfgoed.net/property/> .
+@prefix prov:             <http://www.w3.org/ns/prov#> .
+@prefix qudt-schema:      <https://qudt.org/schema/qudt/> .
+@prefix qudt-unit:        <https://qudt.org/vocab/unit/> .
+@prefix rdf:              <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:             <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rechtspers:       <https://data.cbb.omgeving.vlaanderen.be/id/concept/orgrechtspersoonlijkheid/> .
+@prefix rov:              <http://www.w3.org/ns/regorg#> .
+@prefix schema:           <https://schema.org/> .
+@prefix sdmx-attribute:   <http://purl.org/linked-data/sdmx/2009/attribute#> .
+@prefix sh:               <http://www.w3.org/ns/shacl#> .
+@prefix site:             <https://data.lzs.omgeving.vlaanderen.be/id/site/> .
+@prefix skos:             <http://www.w3.org/2004/02/skos/core#> .
+@prefix sosa:             <http://www.w3.org/ns/sosa/> .
+@prefix sosa-om:          <http://www.w3.org/ns/sosa/om#> .
+@prefix sparqlconstraint: <https://data.omgeving.vlaanderen.be/id/sparqlconstraint/luchtzuiveringssysteem/> .
+@prefix ssn:              <http://www.w3.org/ns/ssn/> .
+@prefix systeem:          <https://data.lzs.omgeving.vlaanderen.be/id/installation/> .
+@prefix time:             <http://www.w3.org/2006/time#> .
+@prefix unit:             <http://qudt.org/vocab/unit/> .
+@prefix vcard:            <http://www.w3.org/2006/vcard/ns#> .
+@prefix xsd:              <http://www.w3.org/2001/XMLSchema#> .
+
+observatie:fd9c36e65b3a826f5558d7079797f9f7
+        rdf:type                   sh:Violation , sosa:Observation;
+        prov:wasInformedBy         observatie:ffccfee6-b903-498f-9c38-63894de57f22;
+        sosa:hasFeatureOfInterest  systeem:88f17013-168c-4718-9306-996444369784;
+        sosa:hasResult             [ rdf:type   sosa:Result;
+                                     rdf:value  "Waswaterdebiet mag niet kleiner zijn dan 500 m³/h."
+                                   ];
+        sosa:observedProperty      lzsp:waswaterdebietbevloeiing;
+        sosa:phenomenonTime        "2025-04-05T12:01:31+02:00"^^xsd:dateTime;
+        sosa:resultTime            "2025-07-30T13:45:59.265+02:00"^^xsd:dateTime .
+
+observatie:eeb4e882132f995da8593a1b04c43979
+        rdf:type                   sh:Violation , sosa:Observation;
+        prov:wasInformedBy         observatie:ffccfee6-b903-498f-9c38-63894de57f31;
+        sosa:hasFeatureOfInterest  systeem:88f17013-168c-4718-9306-996444369784;
+        sosa:hasResult             [ rdf:type   sosa:Result;
+                                     rdf:value  "Zuurtegraad (pH) mag niet hoger zijn dan 7.5. kl"
+                                   ];
+        sosa:observedProperty      lzsp:zuurtegraadwaswater;
+        sosa:phenomenonTime        "2025-04-05T13:01:31+02:00"^^xsd:dateTime;
+        sosa:resultTime            "2025-07-30T13:45:59.265+02:00"^^xsd:dateTime .

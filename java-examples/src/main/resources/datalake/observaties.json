@@ -1,0 +1,165 @@
+[
+    {
+        "_id": "observatie:ffccfee6-b903-498f-9c38-63894de57f24",
+        "_type": "sosa:Observation",
+        "hasFeatureOfInterest": "systeem:0000144d-2395-4721-b966-8202e37f512d",
+        "result": {
+            "_type": "sosa:Result",
+            "eenheid": "unit:PH",
+            "numerieke_waarde": 3.7
+        },
+        "observedProperty": "lzsp:zuurtegraadwaswater",
+        "resultTime": "2025-04-05T12:01:31+02:00"
+    },
+    {
+        "_id": "observatie:ffccfee6-b903-498f-9c38-63894de57f13",
+        "_type": "sosa:Observation",
+        "hasFeatureOfInterest": "systeem:0000144d-2395-4721-b966-8202e37f512d",
+        "result": {
+            "_type": "sosa:Result",
+            "eenheid": "unit:PA",
+            "numerieke_waarde": 359
+        },
+        "observedProperty": "lzsp:drukvaloverhetsysteem",
+        "resultTime": "2025-04-05T12:01:31+02:00"
+    },
+    {
+        "_id": "observatie:ffccfee6-b903-498f-9c38-63894de57f14",
+        "_type": "sosa:Observation",
+        "hasFeatureOfInterest": "systeem:0000144d-2395-4721-b966-8202e37f512d",
+        "result": {
+            "_type": "sosa:Result",
+            "eenheid": "unit:MilliS-PER-CentiM",
+            "numerieke_waarde": 50
+        },
+        "observedProperty": "lzsp:geleidbaarheidvanhetwaswater",
+        "resultTime": "2025-04-05T12:01:31+02:00"
+    },
+    {
+        "_id": "observatie:ffccfee6-b903-498f-9c38-63894de57f15",
+        "_type": "sosa:Observation",
+        "hasFeatureOfInterest": "systeem:0000144d-2395-4721-b966-8202e37f512d",
+        "result": {
+            "_type": "sosa:Result",
+            "eenheid": "unit:M3",
+            "numerieke_waarde": 60
+        },
+        "observedProperty": "lzsp:spuiwaterproductie",
+        "resultTime": "2025-04-05T12:01:31+02:00"
+    },
+    {
+        "_id": "observatie:ffccfee6-b903-498f-9c38-63894de57f21",
+        "_type": "sosa:Observation",
+        "hasFeatureOfInterest": "systeem:0000144d-2395-4721-b966-8202e37f512d",
+        "result": {
+            "_type": "sosa:Result",
+            "eenheid": "unit:M3-PER-HR",
+            "numerieke_waarde": 7
+        },
+        "observedProperty": "lzsp:waswaterdebiet",
+        "resultTime": "2025-04-05T12:01:31+02:00"
+    },
+    {
+        "_id": "observatie:ffccfee6-b903-498f-9c38-63894de57f16",
+        "_type": "sosa:Observation",
+        "hasFeatureOfInterest": "systeem:0000144d-2395-4721-b966-8202e37f512d",
+        "result": {
+            "_type": "sosa:Result",
+            "kwalitatieve_waarde": "lzsst:leeg"
+        },
+        "observedProperty": "lzsp:stalbezetting",
+        "resultTime": "2025-04-05T12:01:31+02:00"
+    },
+    {
+        "_id": "observatie:ffccfee6-b903-498f-9c38-63894de57f18",
+        "_type": "sosa:Observation",
+        "hasFeatureOfInterest": "systeem:0000144d-2395-4721-b966-8202e37f512d",
+        "result": {
+            "_type": "sosa:Result",
+            "kwalitatieve_waarde": "lzss:operationeel"
+        },
+        "observedProperty": "lzsp:systeemstatus",
+        "resultTime": "2025-04-05T12:01:31+02:00"
+    },
+    {
+        "_id": "observatie:ffccfee6-b903-498f-9c38-63894de57f17",
+        "_type": "sosa:Observation",
+        "hasFeatureOfInterest": "systeem:1111144d-2395-4721-b966-8202e37f512d",
+        "result": {
+            "_type": "sosa:Result",
+            "kwalitatieve_waarde": "lzsst:in_gebruik"
+        },
+        "observedProperty": "lzsp:stalbezetting",
+        "resultTime": "2025-04-05T12:01:31+02:00"
+    },
+    {
+        "_id": "observatie:ffccfee6-b903-498f-9c38-63894de57f19",
+        "_type": "sosa:Observation",
+        "hasFeatureOfInterest": "systeem:1111144d-2395-4721-b966-8202e37f512d",
+        "result": {
+            "_type": "sosa:Result",
+            "kwalitatieve_waarde": "lzss:storing"
+        },
+        "observedProperty": "lzsp:systeemstatus",
+        "resultTime": "2025-04-05T12:01:31+02:00"
+    },
+    {
+        "_id": "observatie:ffccfee6-b903-498f-9c38-63894de57f20",
+        "_type": "sosa:Observation",
+        "hasFeatureOfInterest": "systeem:88f17013-168c-4718-9306-996444369784",
+        "result": {
+            "_type": "sosa:Result",
+            "kwalitatieve_waarde": "lzss:onderhoud"
+        },
+        "observedProperty": "lzsp:systeemstatus",
+        "resultTime": "2025-04-05T12:01:31+02:00"
+    },
+    {
+        "_id": "observatie:ffccfee6-b903-498f-9c38-63894de57f11",
+        "_type": "sosa:Observation",
+        "hasFeatureOfInterest": "systeem:88f17013-168c-4718-9306-996444369784",
+        "result": {
+            "_type": "sosa:Result",
+            "eenheid": "unit:M3",
+            "numerieke_waarde": 359
+        },
+        "observedProperty": "lzsp:biobedspoelwaterproductie",
+        "resultTime": "2025-04-05T12:01:31+02:00"
+    },
+    {
+        "_id": "observatie:ffccfee6-b903-498f-9c38-63894de57f12",
+        "_type": "sosa:Observation",
+        "hasFeatureOfInterest": "systeem:88f17013-168c-4718-9306-996444369784",
+        "result": {
+            "_type": "sosa:Result",
+            "eenheid": "unit:M3",
+            "numerieke_waarde": 359
+        },
+        "observedProperty": "lzsp:biobedspuiwaterproductie",
+        "resultTime": "2025-04-05T12:01:31+02:00"
+    },
+    {
+        "_id": "observatie:ffccfee6-b903-498f-9c38-63894de57f22",
+        "_type": "sosa:Observation",
+        "hasFeatureOfInterest": "systeem:88f17013-168c-4718-9306-996444369784",
+        "result": {
+            "_type": "sosa:Result",
+            "eenheid": "unit:M3-PER-HR",
+            "numerieke_waarde": 359
+        },
+        "observedProperty": "lzsp:waswaterdebietbevloeiing",
+        "resultTime": "2025-04-05T12:01:31+02:00"
+    },
+    {
+        "_id": "observatie:ffccfee6-b903-498f-9c38-63894de57f23",
+        "_type": "sosa:Observation",
+        "hasFeatureOfInterest": "systeem:88f17013-168c-4718-9306-996444369784",
+        "result": {
+            "_type": "sosa:Result",
+            "eenheid": "unit:M3-PER-HR",
+            "numerieke_waarde": 359
+        },
+        "observedProperty": "lzsp:waswaterdebietvoorbevochtiging",
+        "resultTime": "2025-04-05T12:01:31+02:00"
+    }
+]
