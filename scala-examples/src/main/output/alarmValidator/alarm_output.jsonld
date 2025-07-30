@@ -285,11 +285,11 @@
     "result" : {
       "_id" : "_:b1",
       "_type" : "sosa:Result",
-      "rdf:value" : "Zuurtegraad (pH) mag niet hoger zijn dan 7.5."
+      "rdf:value" : "Zuurtegraad (pH) mag niet hoger zijn dan 7.5. kl"
     },
     "observedProperty" : "lzsp:zuurtegraadwaswater",
     "phenomenonTime" : "2025-04-05T13:01:31+02:00",
-    "resultTime" : "2025-07-25T14:24:27.417+02:00"
+    "resultTime" : "2025-07-30T13:45:59.265+02:00"
   }, {
     "_id" : "observatie:fd9c36e65b3a826f5558d7079797f9f7",
     "_type" : [ "sh:Violation", "sosa:Observation" ],
@@ -302,6 +302,6 @@
     },
     "observedProperty" : "lzsp:waswaterdebietbevloeiing",
     "phenomenonTime" : "2025-04-05T12:01:31+02:00",
-    "resultTime" : "2025-07-25T14:24:27.417+02:00"
+    "resultTime" : "2025-07-30T13:45:59.265+02:00"
   } ]
 }

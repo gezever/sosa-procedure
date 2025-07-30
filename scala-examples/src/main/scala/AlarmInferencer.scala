@@ -8,7 +8,7 @@ import java.io.FileInputStream
 object AlarmInferencer {
   def main(args: Array[String]): Unit = {
     val observatieModel = ModelFactory.createDefaultModel()
-    val observatie_input = new FileInputStream("scala-examples/src/main/resources/input.jsonld")
+    val observatie_input = new FileInputStream("scala-examples/src/main/resources/be/vlaanderen/omgeving/lzs/alarmValidator/input.jsonld")
 
     RDFParser.create()
       .source(observatie_input)

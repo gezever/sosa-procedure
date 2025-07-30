@@ -27,7 +27,7 @@ object ParquetReaderApp {
     ))
 
     val jsonDF: DataFrame = spark.read
-      .schema(schema)
+      //.schema(schema)
       .option("multiline", "true") // use this if your JSON file spans multiple lines
       .json(jsonFilePath)
 
