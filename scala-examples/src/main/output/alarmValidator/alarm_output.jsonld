@@ -283,25 +283,25 @@
     "wasInformedBy" : "observatie:ffccfee6-b903-498f-9c38-63894de57f31",
     "hasFeatureOfInterest" : "systeem:88f17013-168c-4718-9306-996444369784",
     "result" : {
-      "_id" : "_:b1",
+      "_id" : "_:b0",
       "_type" : "sosa:Result",
       "rdf:value" : "Zuurtegraad (pH) mag niet hoger zijn dan 7.5. kl"
     },
     "observedProperty" : "lzsp:zuurtegraadwaswater",
     "phenomenonTime" : "2025-04-05T13:01:31+02:00",
-    "resultTime" : "2025-07-30T13:45:59.265+02:00"
+    "resultTime" : "2025-07-30T14:11:11.211+02:00"
   }, {
     "_id" : "observatie:fd9c36e65b3a826f5558d7079797f9f7",
     "_type" : [ "sh:Violation", "sosa:Observation" ],
     "wasInformedBy" : "observatie:ffccfee6-b903-498f-9c38-63894de57f22",
     "hasFeatureOfInterest" : "systeem:88f17013-168c-4718-9306-996444369784",
     "result" : {
-      "_id" : "_:b0",
+      "_id" : "_:b1",
       "_type" : "sosa:Result",
       "rdf:value" : "Waswaterdebiet mag niet kleiner zijn dan 500 m³/h."
     },
     "observedProperty" : "lzsp:waswaterdebietbevloeiing",
     "phenomenonTime" : "2025-04-05T12:01:31+02:00",
-    "resultTime" : "2025-07-30T13:45:59.265+02:00"
+    "resultTime" : "2025-07-30T14:11:11.211+02:00"
   } ]
 }
