@@ -1,13 +1,22 @@
 package be.vlaanderen.omgeving.data.spark.java_examples;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static org.apache.spark.sql.functions.coalesce;
 import static org.apache.spark.sql.functions.col;
 import static org.apache.spark.sql.functions.explode;
 import static org.apache.spark.sql.functions.when;
+
 
 /**
  * org.apache.spark.sql.functions.
@@ -15,11 +24,78 @@ import static org.apache.spark.sql.functions.when;
  * https://stackoverflow.com/questions/57595632/how-to-join-using-a-nested-column-in-spark-dataframe
  * https://www.sparkcodehub.com/pyspark/dataframe/join-dataframes-array-column-match#google_vignette
  * https://www.baeldung.com/spark-dataframes
+ * https://www.baeldung.com/scala/spark-joining-dataframes
  */
 public class QueryPrimaireAlarmen {
+    private static final ObjectMapper mapper = new ObjectMapper();
+
     public static void main(String[] args) {
-        generatePrimaireAlarmenBySqlQuery();
+        readJsonFromVariableIntoDataframe();
+//        generatePrimaireAlarmenBySqlQuery();
 //        generatePrimaireAlarmenWithDataframeApi();
+    }
+
+    /*
+     * https://stackoverflow.com/questions/57365802/convert-a-list-of-map-in-java-to-dataset-in-spark
+     * https://www.baeldung.com/spark-dataframes
+     * https://stackoverflow.com/questions/46317098/how-to-convert-map-to-dataframe/46317244
+     * https://kontext.tech/project/spark/article/scala-parse-json-string-as-spark-dataframe
+     * https://tsaiprabhanj.medium.com/spark-functions-from-json-3ec3fedfd875
+     */
+    private static void readJsonFromVariableIntoDataframe() {
+        SparkSession spark = SparkSession.builder().appName("readjsonvariableintodf").master("local").getOrCreate();
+        JavaSparkContext sparkContext = new JavaSparkContext(spark.sparkContext());
+        String json = """
+                {
+                    "@context": null,
+                    "@graph": [
+                        {
+                            "_id": "1",
+                            "_type" : null
+                        },
+                        {
+                            "_id": "2",
+                            "_type" : null
+                        }
+                    ]
+                }
+                """;
+        try {
+            Map object = mapper.readValue(json, Map.class);
+            List<Map> records = (List<Map>) object.get("@graph");
+
+            List<String> jsonRecords = new ArrayList<>();
+            for (Map record : records) {
+                jsonRecords.add(mapper.writeValueAsString(record));
+            }
+
+            // alternative 1
+            JavaRDD<String> stringDataset = sparkContext.parallelize(jsonRecords);
+            Dataset<Row> structuredDs1 = spark.read().json(stringDataset);
+
+            structuredDs1.show();
+            structuredDs1.printSchema();
+
+            // alternative 2
+            Dataset stringDataset2 = spark.createDataset(jsonRecords, Encoders.STRING());
+            stringDataset2.show();
+            stringDataset2.printSchema();
+
+            Dataset structuredDs2 = spark.read().json(stringDataset2);
+            structuredDs2.show();
+            structuredDs2.printSchema();
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // todo
+    private static void readFromClassPath() {
+    }
+
+    // todo
+    private static void writeTempFileToLoadDataframe() {
     }
 
     /**
