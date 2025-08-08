@@ -14,7 +14,13 @@ import java.util.Map;
 
 import static org.apache.spark.sql.functions.coalesce;
 import static org.apache.spark.sql.functions.col;
+import static org.apache.spark.sql.functions.concat;
+import static org.apache.spark.sql.functions.current_timestamp;
 import static org.apache.spark.sql.functions.explode;
+import static org.apache.spark.sql.functions.lit;
+import static org.apache.spark.sql.functions.struct;
+import static org.apache.spark.sql.functions.to_date;
+import static org.apache.spark.sql.functions.uuid;
 import static org.apache.spark.sql.functions.when;
 
 
@@ -182,15 +188,21 @@ public class QueryPrimaireAlarmen {
 
     private static void generatePrimaireAlarmenWithDataframeApi() {
         SparkSession spark = SparkSession.builder().appName("QueryAlarmen").master("local").getOrCreate();
+
         // Read json into dataframe
         Dataset<Row> lzs_df = spark.read().option("multiline", "true").json("java-examples/src/main/resources/datalake/lzs.json");
         Dataset<Row> bandbreedtes_df = spark.read().option("multiline", "true").json("java-examples/src/main/resources/datalake/normbandbreedtes.json");
 
+        // Selecteer enkel info die we nodig hebben
         Dataset<Row> lzs = lzs_df.select(col("_id"), col("type"));
         Dataset<Row> operatingrange = lzs_df.select(col("_id"), explode(col("hasOperatingRange.hasOperatingProperty")).alias("operatingproperty"));
 
+        // Join dataset en bereken absolute bandbreedtes
         Dataset<Row> joinedDataset = lzs.join(bandbreedtes_df, bandbreedtes_df.col("subject").equalTo(lzs.col("type")))
-                .join(operatingrange, operatingrange.col("_id").equalTo(lzs.col("_id")).and(operatingrange.col("operatingproperty.forProperty").equalTo(bandbreedtes_df.col("forProperty"))), "left")
+                .join(operatingrange, operatingrange.col("_id").equalTo(lzs.col("_id")).and(operatingrange.col("operatingproperty.forProperty").equalTo(bandbreedtes_df.col("forProperty"))), "left");
+
+        // Bereken absolute bandbreedte en selecteer info die we nodig hebben om primaire alarm observaties te genereren
+        Dataset<Row> absolutenormbandbreedtes = joinedDataset
                 .withColumn("absMinValue",
                         when(col("operatie").equalTo("som"), coalesce(col("operatingproperty.maxValue").$plus(col("minValue")), col("operatingproperty.value").$plus(col("minValue"))))
                                 .when(col("operatie").equalTo("product"), coalesce(col("operatingproperty.maxValue").multiply(col("minValue")), col("operatingproperty.value").multiply(col("minValue"))))
@@ -198,10 +210,9 @@ public class QueryPrimaireAlarmen {
                 .withColumn("absMaxValue",
                         when(col("operatie").equalTo("som"), coalesce(col("operatingproperty.minValue").$plus(col("maxValue")), col("operatingproperty.value").$plus(col("maxValue"))))
                                 .when(col("operatie").equalTo("product"), coalesce(col("operatingproperty.minValue").multiply(col("maxValue")), col("operatingproperty.value").multiply(col("maxValue"))))
-                                .otherwise(col("maxValue")));
-
-        Dataset<Row> absolutenormbandbreedtes = joinedDataset
+                                .otherwise(col("maxValue")))
                 .select(lzs.col("_id").alias("lzsid"),
+                        col("id").alias("bbid"),
                         col("forProperty").alias("parameter"),
                         coalesce(col("operatingproperty.value"), col("operatingproperty.minValue"), col("operatingproperty.maxValue")).alias("referentiewaarde"),
                         col("minValue").alias("relMinValue"),
@@ -216,15 +227,40 @@ public class QueryPrimaireAlarmen {
 //        absolutenormbandbreedtes.show();
 //        absolutenormbandbreedtes.printSchema();
 
+        // Selecteer abnormale parameter observaties en norm bandbreedte waarbinnen deze vallen
         Dataset<Row> observaties = spark.read().option("multiline", "true").json("java-examples/src/main/resources/datalake/observaties.json");
         Dataset<Row> observatiesInBandbreedte =
                 observaties.join(absolutenormbandbreedtes, col("lzsid").equalTo(col("hasFeatureOfInterest")).and(col("parameter").equalTo(col("observedProperty"))))
                         .where(col("absMinValue").isNull().or(col("result.numerieke_waarde").gt(col("absMinValue")))
                                 .and(col("absMaxValue").isNull().or(col("result.numerieke_waarde").lt(col("absMaxValue")))));
 
-        observatiesInBandbreedte.show();
+//        observatiesInBandbreedte.show();
 
-        // todo creeer primairealarmobservaties
+        // Creeer primaire alarm observaties
+        Dataset<Row> primairealarmobservaties = observatiesInBandbreedte.select(
+                concat(lit("observation:"), uuid()).alias("_id"),
+                lit("sosa:Observation").alias("_type"),
+                col("hasFeatureOfInterest"),
+                col("observedProperty"),
+                current_timestamp().alias("resultTime"),
+                col("resultTime").alias("phenomenonTime"),
+                col("_id").alias("wasInformedBy"),
+                struct(
+                        concat(lit("observation:"), uuid()).alias("_id"),
+                        lit("sosa:Result").alias("_type"),
+                        col("bbid").alias("value"),
+                        col("type").alias("label"),
+                        col("result.numerieke_waarde").alias("parametervalue"),
+                        col("result.eenheid").alias("parameterunit"),
+                        col("scopeNote")
+                ),
+                to_date(col("resultTime")).alias("datum")
+        );
+
+        primairealarmobservaties.show();
+
+        primairealarmobservaties.write().mode("overwrite").partitionBy("datum").parquet("/Users/pieter/work/git/gezever/sosa-procedure/java-examples/output/parquet/primairealarmen/demo3");
+        primairealarmobservaties.write().mode("overwrite").partitionBy("datum").json("/Users/pieter/work/git/gezever/sosa-procedure/java-examples/output/json/primairealarmen/demo3");
 
         spark.stop();
     }
