@@ -138,10 +138,38 @@ public class QueryPrimaireAlarmen {
         primairealarmenDemo2.printSchema();
 
 
-        primairealarmenDemo2.write().mode("overwrite").partitionBy("datum").parquet("/Users/pieter/work/git/gezever/sosa-procedure/java-examples/output/parquet/primairealarmen");
-        primairealarmenDemo2.write().mode("overwrite").partitionBy("datum").json("/Users/pieter/work/git/gezever/sosa-procedure/java-examples/output/json/primairealarmen");
-//        primairealarmen.write().mode("overwrite").json("/Users/pieter/work/git/gezever/sosa-procedure/java-examples/target/primairealarmen.json");
+        primairealarmenDemo2.write().mode("overwrite").partitionBy("datum").parquet("/Users/pieter/work/git/gezever/sosa-procedure/java-examples/output/parquet/primairealarmen/demo1");
+        primairealarmenDemo2.write().mode("overwrite").partitionBy("datum").json("/Users/pieter/work/git/gezever/sosa-procedure/java-examples/output/json/primairealarmen/demo1");
 
+        String selectAlarmenDemo3 = """
+                SELECT \
+                   concat('observatie:', uuid()) as _id, \
+                   'sosa:Observation' as _type, \
+                   obs.hasFeatureOfInterest, \
+                   obs.observedProperty, \
+                   current_timestamp() as resultTime, \
+                   obs.resultTime as phenomenonTime,
+                   obs._id as wasInformedBy,
+                   named_struct( "_id", concat('result:',uuid()),
+                                 "_type", 'sosa:Result',
+                                 "value", absnorm.bbid,
+                                 "label", absnorm.type,
+                                 "parametervalue", obs.result.numerieke_waarde,
+                                 "parameterunit", obs.result.eenheid,
+                                 "scopenote", absnorm.scopeNote
+                               ) as result,
+                   date(obs.resultTime) as datum
+                FROM  observaties obs \
+                JOIN  absolutenormbandbreedtes absnorm ON absnorm.lzsid = obs.hasFeatureOfInterest AND absnorm.parameter = obs.observedProperty \
+                WHERE (absnorm.minValue is NULL OR obs.result.numerieke_waarde > absnorm.minValue) AND (absnorm.maxValue IS NULL OR obs.result.numerieke_waarde < absnorm.maxValue)""";
+
+        Dataset<Row> primairealarmenDemo3 = spark.sql(selectAlarmenDemo3);
+        primairealarmenDemo3.show();
+        primairealarmenDemo3.printSchema();
+
+
+        primairealarmenDemo3.write().mode("overwrite").partitionBy("datum").parquet("/Users/pieter/work/git/gezever/sosa-procedure/java-examples/output/parquet/primairealarmen/demo2");
+        primairealarmenDemo3.write().mode("overwrite").partitionBy("datum").json("/Users/pieter/work/git/gezever/sosa-procedure/java-examples/output/json/primairealarmen/demo2");
         spark.stop();
     }
 
