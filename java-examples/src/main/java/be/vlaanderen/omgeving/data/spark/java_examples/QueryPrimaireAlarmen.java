@@ -31,26 +31,26 @@ public class QueryPrimaireAlarmen {
 
     public static void main(String[] args) {
 //        readJsonFromVariableIntoDataframe();
-        generatePrimaireAlarmenBySqlQuery();
-//        generatePrimaireAlarmenWithDataframeApi();
+//        generatePrimaireAlarmenBySqlQuery();
+        generatePrimaireAlarmenWithDataframeApi();
     }
 
     /**
-     * Bereken primaire alarmen op basis van sql query.
-     * De query die de absolute bandbreedtes per lzs berekent kan telkens on the fly gebeuren of vooraf reeds gematerialiseerd zijn in bestaande persistente view of tabel.
+     * Bereken primaire alarmen op basis van SPARK sql query.
+     * De query die de absolute bandbreedtes per lzs berekent kan telkens on the fly gebeuren of vooraf reeds gematerialiseerd zijn in bestaande persistente view, tabel en/of parquet files.
      */
     private static void generatePrimaireAlarmenBySqlQuery() {
         SparkSession spark = SparkSession.builder().appName("QueryAlarmen").master("local").getOrCreate();
-        // Read json into dataframe
+        // Read json or parquet into dataframe
         Dataset<Row> lzsDF = spark.read().option("multiline", "true").json("java-examples/src/main/resources/datalake/lzs.json");
         Dataset<Row> normbandbreedtesDF = spark.read().option("multiline", "true").json("java-examples/src/main/resources/datalake/normbandbreedtes.json");
 
-        // Parquet or json files can also be used to create a temporary view and then used in SQL statements
+        // Json or Parquet can also be used to create a temporary view and then used in SQL statements
         lzsDF.createOrReplaceTempView("lzsView");
         normbandbreedtesDF.createOrReplaceTempView("normbandbreedtesView");
 
         // Bereken absolute 'norm' bandbreedtes per parameter per lzs
-        // Een norm specifieert 'abnormale' bandbreedtes (outofboundranges) voor een parameter.
+        // De codelijst met norm bandbreedtes bevat bandbreedtes van abnormale parameter waarden (outofboundranges).
         // Deze bandbreedtes kunnen relatief t.o.v referentiewaarde uitgedrukt zijn (operatie = 'som' of 'product') of absoluut
         String selectBandbreedtes = """
                 WITH lzs AS (SELECT _id, type FROM lzsView), \
@@ -82,15 +82,17 @@ public class QueryPrimaireAlarmen {
         absolutenormbandbreedtes.show();
         absolutenormbandbreedtes.printSchema();
 
+        // Create a temporary view van de absolutenormbandbreedtes, Dit zou ook vooraf gematerialiseerd kunnen zijn in parquet files en/of table.
         absolutenormbandbreedtes.createOrReplaceTempView("absolutenormbandbreedtes");
 
+        // Read en parameter observations die we willen valideren
         Dataset<Row> observaties = spark.read().option("multiline", "true").json("java-examples/src/main/resources/datalake/observaties.json");
         observaties.createOrReplaceTempView("observaties");
 
-        String selectAlarmenDemo = """
+        // Een testje ter illustratie: selecteer observaties met abnormale waarden en wat extra metadata
+        String selectAlarmenTest = """
                 SELECT \
-                   concat('observatie:', uuid()) as _id, \
-                   'sosa:Observation' as _type, \
+                   uuid() as _id, \
                    obs.hasFeatureOfInterest, \
                    obs.observedProperty, \
                    current_date() as resultTime, \
@@ -105,10 +107,11 @@ public class QueryPrimaireAlarmen {
                 JOIN  absolutenormbandbreedtes absnorm ON absnorm.lzsid = obs.hasFeatureOfInterest AND absnorm.parameter = obs.observedProperty \
                 WHERE (absnorm.minValue is NULL OR obs.result.numerieke_waarde > absnorm.minValue) AND (absnorm.maxValue IS NULL OR obs.result.numerieke_waarde < absnorm.maxValue)""";
 
-        Dataset<Row> primairealarmenDemo = spark.sql(selectAlarmenDemo);
-        primairealarmenDemo.show();
+        Dataset<Row> primairealarmenTest = spark.sql(selectAlarmenTest);
+        primairealarmenTest.show();
 
-        String selectAlarmenDemo2 = """
+        // Bereken en creeer primaire alarm observaties op basis van SQL query demo 1
+        String selectPrimaireAlarmObservatiesDemo1 = """
                 SELECT \
                    concat('observatie:', uuid()) as _id, \
                    'sosa:Observation' as _type, \
@@ -133,15 +136,16 @@ public class QueryPrimaireAlarmen {
                 JOIN  absolutenormbandbreedtes absnorm ON absnorm.lzsid = obs.hasFeatureOfInterest AND absnorm.parameter = obs.observedProperty \
                 WHERE (absnorm.minValue is NULL OR obs.result.numerieke_waarde > absnorm.minValue) AND (absnorm.maxValue IS NULL OR obs.result.numerieke_waarde < absnorm.maxValue)""";
 
-        Dataset<Row> primairealarmenDemo2 = spark.sql(selectAlarmenDemo2);
-        primairealarmenDemo2.show();
-        primairealarmenDemo2.printSchema();
+        Dataset<Row> primairealarmenDemo1 = spark.sql(selectPrimaireAlarmObservatiesDemo1);
+        primairealarmenDemo1.show();
+//        primairealarmenDemo1.printSchema();
 
+        // schrijf alarm observaties weg gepartitioneerd op datum
+        primairealarmenDemo1.write().mode("overwrite").partitionBy("datum").parquet("/Users/pieter/work/git/gezever/sosa-procedure/java-examples/output/parquet/primairealarmen/demo1");
+        primairealarmenDemo1.write().mode("overwrite").partitionBy("datum").json("/Users/pieter/work/git/gezever/sosa-procedure/java-examples/output/json/primairealarmen/demo1");
 
-        primairealarmenDemo2.write().mode("overwrite").partitionBy("datum").parquet("/Users/pieter/work/git/gezever/sosa-procedure/java-examples/output/parquet/primairealarmen/demo1");
-        primairealarmenDemo2.write().mode("overwrite").partitionBy("datum").json("/Users/pieter/work/git/gezever/sosa-procedure/java-examples/output/json/primairealarmen/demo1");
-
-        String selectAlarmenDemo3 = """
+        // Bereken en creeer primaire alarm observaties op basis van SQL query demo 2
+        String selectPrimaireAlarmObservatiesDemo2 = """
                 SELECT \
                    concat('observatie:', uuid()) as _id, \
                    'sosa:Observation' as _type, \
@@ -163,13 +167,16 @@ public class QueryPrimaireAlarmen {
                 JOIN  absolutenormbandbreedtes absnorm ON absnorm.lzsid = obs.hasFeatureOfInterest AND absnorm.parameter = obs.observedProperty \
                 WHERE (absnorm.minValue is NULL OR obs.result.numerieke_waarde > absnorm.minValue) AND (absnorm.maxValue IS NULL OR obs.result.numerieke_waarde < absnorm.maxValue)""";
 
-        Dataset<Row> primairealarmenDemo3 = spark.sql(selectAlarmenDemo3);
-        primairealarmenDemo3.show();
-        primairealarmenDemo3.printSchema();
+        Dataset<Row> primairealarmenDemo2 = spark.sql(selectPrimaireAlarmObservatiesDemo2);
+        primairealarmenDemo2.show();
+//        primairealarmenDemo2.printSchema();
 
 
-        primairealarmenDemo3.write().mode("overwrite").partitionBy("datum").parquet("/Users/pieter/work/git/gezever/sosa-procedure/java-examples/output/parquet/primairealarmen/demo2");
-        primairealarmenDemo3.write().mode("overwrite").partitionBy("datum").json("/Users/pieter/work/git/gezever/sosa-procedure/java-examples/output/json/primairealarmen/demo2");
+        // schrijf alarm observaties weg gepartitioneerd op datum
+        primairealarmenDemo2.write().mode("overwrite").partitionBy("datum").parquet("/Users/pieter/work/git/gezever/sosa-procedure/java-examples/output/parquet/primairealarmen/demo2");
+        primairealarmenDemo2.write().mode("overwrite").partitionBy("datum").json("/Users/pieter/work/git/gezever/sosa-procedure/java-examples/output/json/primairealarmen/demo2");
+
+        // End spark session
         spark.stop();
     }
 
@@ -177,43 +184,47 @@ public class QueryPrimaireAlarmen {
         SparkSession spark = SparkSession.builder().appName("QueryAlarmen").master("local").getOrCreate();
         // Read json into dataframe
         Dataset<Row> lzs_df = spark.read().option("multiline", "true").json("java-examples/src/main/resources/datalake/lzs.json");
-        Dataset<Row> normen_df = spark.read().option("multiline", "true").json("java-examples/src/main/resources/datalake/normen.json");
+        Dataset<Row> bandbreedtes_df = spark.read().option("multiline", "true").json("java-examples/src/main/resources/datalake/normbandbreedtes.json");
 
         Dataset<Row> lzs = lzs_df.select(col("_id"), col("type"));
-        Dataset<Row> operatingrange = lzs_df.select(col("_id"), explode(col("parameterconditie")).alias("parameterrange"));
-        Dataset<Row> norm = normen_df.select(col("klasse"), col("parameter"), explode(col("bandbreedtes")).alias("bandbreedte"));
+        Dataset<Row> operatingrange = lzs_df.select(col("_id"), explode(col("hasOperatingRange.hasOperatingProperty")).alias("operatingproperty"));
 
-        Dataset<Row> temp = lzs.join(norm, norm.col("klasse").equalTo(lzs.col("type")))
-                .join(operatingrange, operatingrange.col("_id").equalTo(lzs.col("_id")).and(operatingrange.col("parameterrange.parameter").equalTo(norm.col("parameter"))), "left")
-                .withColumn("minValue",
-                        when(col("bandbreedte.operatie").equalTo("som"), coalesce(col("parameterrange.maxValue").$plus(col("bandbreedte.minValue")), col("parameterrange.value").$plus(col("bandbreedte.minValue"))))
-                                .when(col("bandbreedte.operatie").equalTo("product"), coalesce(col("parameterrange.maxValue").multiply(col("bandbreedte.minValue")), col("parameterrange.value").multiply(col("bandbreedte.minValue"))))
-                                .otherwise(col("bandbreedte.minValue")))
-                .withColumn("maxValue",
-                        when(col("bandbreedte.operatie").equalTo("som"), coalesce(col("parameterrange.minValue").$plus(col("bandbreedte.maxValue")), col("parameterrange.value").$plus(col("bandbreedte.maxValue"))))
-                                .when(col("bandbreedte.operatie").equalTo("product"), coalesce(col("parameterrange.minValue").multiply(col("bandbreedte.maxValue")), col("parameterrange.value").multiply(col("bandbreedte.maxValue"))))
-                                .otherwise(col("bandbreedte.maxValue")))
+        Dataset<Row> joinedDataset = lzs.join(bandbreedtes_df, bandbreedtes_df.col("subject").equalTo(lzs.col("type")))
+                .join(operatingrange, operatingrange.col("_id").equalTo(lzs.col("_id")).and(operatingrange.col("operatingproperty.forProperty").equalTo(bandbreedtes_df.col("forProperty"))), "left")
+                .withColumn("absMinValue",
+                        when(col("operatie").equalTo("som"), coalesce(col("operatingproperty.maxValue").$plus(col("minValue")), col("operatingproperty.value").$plus(col("minValue"))))
+                                .when(col("operatie").equalTo("product"), coalesce(col("operatingproperty.maxValue").multiply(col("minValue")), col("operatingproperty.value").multiply(col("minValue"))))
+                                .otherwise(col("minValue")))
+                .withColumn("absMaxValue",
+                        when(col("operatie").equalTo("som"), coalesce(col("operatingproperty.minValue").$plus(col("maxValue")), col("operatingproperty.value").$plus(col("maxValue"))))
+                                .when(col("operatie").equalTo("product"), coalesce(col("operatingproperty.minValue").multiply(col("maxValue")), col("operatingproperty.value").multiply(col("maxValue"))))
+                                .otherwise(col("maxValue")));
+
+        Dataset<Row> absolutenormbandbreedtes = joinedDataset
                 .select(lzs.col("_id").alias("lzsid"),
-                        col("parameter"),
-                        coalesce(col("parameterrange.value"), col("parameterrange.minValue"), col("parameterrange.maxValue")).alias("referentiewaarde"),
-                        col("bandbreedte.minValue").alias("relatieveMinValueNormBandbreedte"),
-                        col("bandbreedte.maxValue").alias("relatieveMaxValueNormBandbreedte"),
-                        col("bandbreedte.operatie").alias("operatie"),
-                        col("bandbreedte.label").alias("label"),
-                        col("bandbreedte.type").alias("type"),
-                        col("bandbreedte.note").alias("note"),
-                        col("minValue"),
-                        col("maxValue"));
+                        col("forProperty").alias("parameter"),
+                        coalesce(col("operatingproperty.value"), col("operatingproperty.minValue"), col("operatingproperty.maxValue")).alias("referentiewaarde"),
+                        col("minValue").alias("relMinValue"),
+                        col("maxValue").alias("relMaxValue"),
+                        col("operatie"),
+                        col("prefLabel").alias("label"),
+                        col("dc_type").alias("type"),
+                        col("scopeNote"),
+                        col("absMinValue"),
+                        col("absMaxValue"));
 
-
-        temp.show();
-        temp.printSchema();
+//        absolutenormbandbreedtes.show();
+//        absolutenormbandbreedtes.printSchema();
 
         Dataset<Row> observaties = spark.read().option("multiline", "true").json("java-examples/src/main/resources/datalake/observaties.json");
-        observaties.join(temp, col("lzsid").equalTo(col("hasFeatureOfInterest")).and(col("parameter").equalTo(col("observedProperty"))))
-                .where(col("minValue").isNull().or(col("result.numerieke_waarde").gt(col("minValue"))).and(col("maxValue").isNull().or(col("result.numerieke_waarde").lt(col("maxValue")))))
-                .show();
+        Dataset<Row> observatiesInBandbreedte =
+                observaties.join(absolutenormbandbreedtes, col("lzsid").equalTo(col("hasFeatureOfInterest")).and(col("parameter").equalTo(col("observedProperty"))))
+                        .where(col("absMinValue").isNull().or(col("result.numerieke_waarde").gt(col("absMinValue")))
+                                .and(col("absMaxValue").isNull().or(col("result.numerieke_waarde").lt(col("absMaxValue")))));
 
+        observatiesInBandbreedte.show();
+
+        // todo creeer primairealarmobservaties
 
         spark.stop();
     }
