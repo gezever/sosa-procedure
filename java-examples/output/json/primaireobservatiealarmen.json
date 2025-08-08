@@ -1,0 +1,122 @@
+[
+  {
+    "_id": "observatie:506ec645-0b90-45bc-917a-697496187c5e",
+    "_type": "sosa:Observation",
+    "hasFeatureOfInterest": "LZS:0000001",
+    "observedProperty": "lzsp:zuurtegraadwaswater",
+    "resultTime": "2025-08-08T13:13:49.437+02:00",
+    "phenomenonTime": "2025-04-06T12:01:31+02:00",
+    "wasInformedBy": "observatie:ffccfee6-b903-498f-9c38-63894de57f24",
+    "result": {
+      "_id": "observatie:b4a9faea-fc7c-46bd-b635-b0e03d2e58ef",
+      "_type": [
+        "sosa:Result",
+        "qb:Observation"
+      ],
+      "value": "lzs-norm:1",
+      "label": "Onder minimum grenswaarde",
+      "parameterDimensie": "lzsp:zuurtegraadwaswater",
+      "lzsDimensie": "LZS:0000001",
+      "refPeriod": "2025-04-06T12:01:31+02:00",
+      "parametervalue": 4.0,
+      "parameterunit": "unit:PH",
+      "scopenote": "< 6"
+    }
+  },
+  {
+    "_id": "observatie:e713af52-63af-429c-a0b1-4e2390806e41",
+    "_type": "sosa:Observation",
+    "hasFeatureOfInterest": "LZS:0000001",
+    "observedProperty": "lzsp:geleidbaarheidvanhetwaswater",
+    "resultTime": "2025-08-08T13:13:49.437+02:00",
+    "phenomenonTime": "2025-04-06T12:01:31+02:00",
+    "wasInformedBy": "observatie:ffccfee6-b903-498f-9c38-63894de57f14",
+    "result": {
+      "_id": "observatie:b089bf0a-952a-47c7-aaaf-6d38ad35e81e",
+      "_type": [
+        "sosa:Result",
+        "qb:Observation"
+      ],
+      "value": "lzs-norm:3",
+      "label": "Boven maximum grenswaarde",
+      "parameterDimensie": "lzsp:geleidbaarheidvanhetwaswater",
+      "lzsDimensie": "LZS:0000001",
+      "refPeriod": "2025-04-06T12:01:31+02:00",
+      "parametervalue": 44.0,
+      "parameterunit": "unit:MilliS-PER-CentiM",
+      "scopenote": "> waarde technische fiche"
+    }
+  },
+  {
+    "_id": "observatie:b731a0e0-bf80-474f-a02a-d10bcc475f0d",
+    "_type": "sosa:Observation",
+    "hasFeatureOfInterest": "LZS:0000001",
+    "observedProperty": "lzsp:waswaterdebiet",
+    "resultTime": "2025-08-08T13:13:49.437+02:00",
+    "phenomenonTime": "2025-04-06T12:01:31+02:00",
+    "wasInformedBy": "observatie:ffccfee6-b903-498f-9c38-63894de57f21",
+    "result": {
+      "_id": "observatie:573203f8-81ed-49f0-9d76-3eccc69b1d45",
+      "_type": [
+        "sosa:Result",
+        "qb:Observation"
+      ],
+      "value": "lzs-norm:4",
+      "label": "Onder de minimum grenswaarde",
+      "parameterDimensie": "lzsp:waswaterdebiet",
+      "lzsDimensie": "LZS:0000001",
+      "refPeriod": "2025-04-06T12:01:31+02:00",
+      "parametervalue": 2.0,
+      "parameterunit": "unit:M3-PER-HR",
+      "scopenote": "< 0,8 x waarde technische fiche (afwijking > 20%)"
+    }
+  },
+  {
+    "_id": "observatie:aef037ac-77e4-44a9-bcca-8bd07fad8d51",
+    "_type": "sosa:Observation",
+    "hasFeatureOfInterest": "LZS:0000001",
+    "observedProperty": "lzsp:spuiwaterproductie",
+    "resultTime": "2025-08-08T13:13:49.437+02:00",
+    "phenomenonTime": "2025-04-06T12:01:31+02:00",
+    "wasInformedBy": "observatie:ffccfee6-b903-498f-9c38-63894de57f15",
+    "result": {
+      "_id": "observatie:76ef4666-f3d7-4443-a963-53d048b8aa36",
+      "_type": [
+        "sosa:Result",
+        "qb:Observation"
+      ],
+      "value": "lzs-norm:5",
+      "label": "Onder de minimum grenswaarde",
+      "parameterDimensie": "lzsp:spuiwaterproductie",
+      "lzsDimensie": "LZS:0000001",
+      "refPeriod": "2025-04-06T12:01:31+02:00",
+      "parametervalue": 40.0,
+      "parameterunit": "unit:M3",
+      "scopenote": "< 0,9 x waarde technische fiche (afwijking > 10%)"
+    }
+  },
+  {
+    "_id": "observatie:ef74cc65-5537-429e-a598-570c9afa3c39",
+    "_type": "sosa:Observation",
+    "hasFeatureOfInterest": "LZS:0000001",
+    "observedProperty": "lzsp:drukvaloverhetsysteem",
+    "resultTime": "2025-08-08T13:13:49.437+02:00",
+    "phenomenonTime": "2025-04-06T12:01:31+02:00",
+    "wasInformedBy": "observatie:ffccfee6-b903-498f-9c38-63894de57f13",
+    "result": {
+      "_id": "observatie:7fb4a37c-e1ee-4c89-90e6-5b86d52031b7",
+      "_type": [
+        "sosa:Result",
+        "qb:Observation"
+      ],
+      "value": "lzs-norm:7",
+      "label": "Boven maximum grenswaarde",
+      "parameterDimensie": "lzsp:drukvaloverhetsysteem",
+      "lzsDimensie": "LZS:0000001",
+      "refPeriod": "2025-04-06T12:01:31+02:00",
+      "parametervalue": 340.0,
+      "parameterunit": "unit:PA",
+      "scopenote": "> 1,4 x waarde technische fiche (afwijking > 40%)"
+    }
+  }
+]
