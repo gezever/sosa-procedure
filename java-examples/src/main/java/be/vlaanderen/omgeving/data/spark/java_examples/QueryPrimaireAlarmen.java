@@ -86,7 +86,7 @@ public class QueryPrimaireAlarmen {
         Dataset<Row> absolutenormbandbreedtes = spark.sql(selectBandbreedtes);
 
         // cache or persist, multiple 'spark actions' on the same rdd.
-        // Each time you peform a 'spark action' the lazy 'spark transformations' are executed and a value is returned to your driver program.
+        // Each time you peform a 'spark action' your lazy 'spark transformations' are executed on each workernode and a value is returned to your driver program. This is the driver program.
         absolutenormbandbreedtes.cache();
         absolutenormbandbreedtes.show();
         absolutenormbandbreedtes.printSchema();
@@ -148,7 +148,7 @@ public class QueryPrimaireAlarmen {
         Dataset<Row> primairealarmenDemo1 = spark.sql(selectPrimaireAlarmObservatiesDemo1);
 
         // cache or persist, multiple 'spark actions' on the same rdd.
-        // Each time you peform a 'spark action' the lazy 'spark transformations' are executed and a value is returned to your driver program.
+        // Each time you peform a 'spark action' your lazy 'spark transformations' are executed on each workernode and a value is returned to your driver program. This is the driver program.
         primairealarmenDemo1.cache();
         primairealarmenDemo1.show();
 //        primairealarmenDemo1.printSchema();
@@ -183,7 +183,7 @@ public class QueryPrimaireAlarmen {
         Dataset<Row> primairealarmenDemo2 = spark.sql(selectPrimaireAlarmObservatiesDemo2);
 
         // cache or persist, multiple 'spark actions' on the same rdd.
-        // Each time you peform a 'spark action' the lazy 'spark transformations' are executed and a value is returned to your driver program.
+        // Each time you peform a 'spark action' your lazy 'spark transformations' are executed on each workernode and a value is returned to your driver program. This is the driver program.
         primairealarmenDemo2.cache();
         primairealarmenDemo2.show();
 //        primairealarmenDemo2.printSchema();
@@ -236,7 +236,7 @@ public class QueryPrimaireAlarmen {
                         col("absMaxValue"));
 
         // cache or persist, multiple 'spark actions' on the same rdd.
-        // Each time you peform a 'spark action' the lazy 'spark transformations' are executed and a value is returned to your driver program.
+        // Each time you peform a 'spark action' your lazy 'spark transformations' are executed on each workernode and a value is returned to your driver program. This is the driver program.
 //        absolutenormbandbreedtes.show();
 //        absolutenormbandbreedtes.printSchema();
 
@@ -271,7 +271,7 @@ public class QueryPrimaireAlarmen {
         );
 
         // cache or persist, multiple 'spark actions' on the same rdd.
-        // Each time you peform a 'spark action' the lazy 'spark transformations' are executed and a value is returned to your driver program.
+        // Each time you peform a 'spark action' your lazy 'spark transformations' are executed on each workernode and a value is returned to your driver program. This is the driver program.
         primairealarmobservaties.cache();
         primairealarmobservaties.show();
 
