@@ -84,9 +84,10 @@ public class QueryPrimaireAlarmen {
                 LEFT JOIN operatingrange ON operatingrange.lzsid = lzs._id AND operatingrange.operatingproperty.forProperty = bandbreedte.forProperty""";
 
         Dataset<Row> absolutenormbandbreedtes = spark.sql(selectBandbreedtes);
-        // cache or persist, in this test we perform multiple 'spark actions' on the same rdd. A spark action returns a value to your driver program.
-        absolutenormbandbreedtes.cache();
 
+        // cache or persist, multiple 'spark actions' on the same rdd.
+        // Each time you peform a 'spark action' the lazy 'spark transformations' are executed and a value is returned to your driver program.
+        absolutenormbandbreedtes.cache();
         absolutenormbandbreedtes.show();
         absolutenormbandbreedtes.printSchema();
 
@@ -146,6 +147,8 @@ public class QueryPrimaireAlarmen {
 
         Dataset<Row> primairealarmenDemo1 = spark.sql(selectPrimaireAlarmObservatiesDemo1);
 
+        // cache or persist, multiple 'spark actions' on the same rdd.
+        // Each time you peform a 'spark action' the lazy 'spark transformations' are executed and a value is returned to your driver program.
         primairealarmenDemo1.cache();
         primairealarmenDemo1.show();
 //        primairealarmenDemo1.printSchema();
@@ -178,6 +181,9 @@ public class QueryPrimaireAlarmen {
                 WHERE (absnorm.minValue is NULL OR obs.result.numerieke_waarde > absnorm.minValue) AND (absnorm.maxValue IS NULL OR obs.result.numerieke_waarde < absnorm.maxValue)""";
 
         Dataset<Row> primairealarmenDemo2 = spark.sql(selectPrimaireAlarmObservatiesDemo2);
+
+        // cache or persist, multiple 'spark actions' on the same rdd.
+        // Each time you peform a 'spark action' the lazy 'spark transformations' are executed and a value is returned to your driver program.
         primairealarmenDemo2.cache();
         primairealarmenDemo2.show();
 //        primairealarmenDemo2.printSchema();
@@ -229,6 +235,8 @@ public class QueryPrimaireAlarmen {
                         col("absMinValue"),
                         col("absMaxValue"));
 
+        // cache or persist, multiple 'spark actions' on the same rdd.
+        // Each time you peform a 'spark action' the lazy 'spark transformations' are executed and a value is returned to your driver program.
 //        absolutenormbandbreedtes.show();
 //        absolutenormbandbreedtes.printSchema();
 
@@ -262,6 +270,8 @@ public class QueryPrimaireAlarmen {
                 to_date(col("resultTime")).alias("datum")
         );
 
+        // cache or persist, multiple 'spark actions' on the same rdd.
+        // Each time you peform a 'spark action' the lazy 'spark transformations' are executed and a value is returned to your driver program.
         primairealarmobservaties.cache();
         primairealarmobservaties.show();
 

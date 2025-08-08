@@ -48,6 +48,9 @@ public class TestParquetCodelijst {
 //                .withColumn("dct_type", explode(col("dct_type")))
                 .where(col("type").equalTo(lit("http://www.w3.org/ns/ssn/Property")));
 // https://medium.com/@ashwin_kumar_/spark-dataframe-cache-and-persist-explained-019ab2abf20f
+
+        // cache or persist, multiple 'spark actions' on the same rdd.
+        // Each time you peform a 'spark action' the lazy 'spark transformations' are executed and a value is returned to your driver program.
         parameters.cache();
 //        parameters.persist();
 //        Broadcast<Dataset<Row>> broadcast = sparkContext.broadcast(tst);
